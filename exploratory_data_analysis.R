@@ -404,11 +404,11 @@ ce2 <- left_join(ce2, df.weights, by = c("question" = "long_name"))
 ce2$comp_score <- ce2$weight * ce2$pct_v
 
 
-# 7. sort by composite score----
-ce3 <- ce2 %>%
-  group_by(`Client ID`,Race) %>%
-  summarise(comp_score = sum(comp_score)) %>%
-  .[order(.$comp_score,decreasing = T),]
+# # 7. sort by composite score----
+# ce3 <- ce2 %>%
+#   group_by(`Client ID`,Race) %>%
+#   summarise(comp_score = sum(comp_score)) %>%
+#   .[order(.$comp_score,decreasing = T),]
 
 # try(score.fingerprint <- unlist(lapply(df.weights$short_name, get)) %>%
 #   paste(., sep = "|", collapse = "|"))
@@ -426,3 +426,25 @@ ce3 <- ce2 %>%
 #         score_fingerprint ~ Race, 
 #         value.var = "avg_cs"))
 
+
+# DATA EXPLORATION----
+
+# Race / Ethnicity ----
+out_re <- ce2 %>%
+  group_by(Race, Ethnicty) %>%
+  summarise() %>%
+  ungroup() %>%
+  mutate(., 
+         race_eth = ifelse(Race == "White" & 
+                             Ethnicty == "Non-Hispanic", 
+                           "White, non-HISP", NA), 
+         race_eth = ifelse(is.na(race_eth) & 
+                             Race == "Black" & 
+                             Ethnicty == "Non-Hispanic", 
+                           "Black, non-HISP", race_eth), 
+         race_eth = ifelse(is.na(race_eth), 
+                           "Other", race_eth))
+
+
+
+# Gender

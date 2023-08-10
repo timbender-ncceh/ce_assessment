@@ -9,4 +9,8 @@
 ### Model Parameters
 **(imported as data into the model)**
 * 
+### Model Code
+* ce_assessment_micro2.R
+* exploratory_data_analysis.R
+* 
 

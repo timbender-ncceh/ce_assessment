@@ -1,0 +1,44 @@
+question,response,qnum,order_vuln,order_vuln.norm
+How long has it been since you lived in your own place?,Less than 3 months,1,0,0
+How long has it been since you lived in your own place?,3 to 5 months,1,1,0.25
+How long has it been since you lived in your own place?,6 to 11 months,1,2,0.5
+How long has it been since you lived in your own place?,12 to 35 months (1-2 years),1,3,0.75
+How long has it been since you lived in your own place?,36 months (3 years) or more,1,4,1
+"How many months have you been without a home, such as living outside or in a shelter?",Less than 3 months,2,0,0
+"How many months have you been without a home, such as living outside or in a shelter?",3 to 5 months,2,1,0.25
+"How many months have you been without a home, such as living outside or in a shelter?",6 to 11 months,2,2,0.5
+"How many months have you been without a home, such as living outside or in a shelter?",12 to 35 months (1-2 years),2,3,0.75
+"How many months have you been without a home, such as living outside or in a shelter?",36 months (3 years) or more,2,4,1
+Where did you sleep last night?,"Sheltered (ES, TH)",3,0,0
+Where did you sleep last night?,Unsheltered,3,1,1
+Where are you going to sleep tonight?,"Sheltered (ES, TH)",4,0,0
+Where are you going to sleep tonight?,Unsheltered,4,1,1
+Are you currently experiencing or feel you are at risk of experiencing violence?,No,5,0,0
+Are you currently experiencing or feel you are at risk of experiencing violence?,Yes,5,1,1
+Did you leave your previous or current living situation because you felt unsafe?,No,6,0,0
+Did you leave your previous or current living situation because you felt unsafe?,Yes,6,1,1
+Have you ever experienced violence with someone close to you?,No,7,0,0
+Have you ever experienced violence with someone close to you?,Yes,7,1,1
+Have you experienced violence since becoming homeless?,No,8,0,0
+Have you experienced violence since becoming homeless?,Yes,8,1,1
+Does anyone in your household have any physical or mental health conditions that are treated or have been treated by a professional?,No,9,0,0
+Does anyone in your household have any physical or mental health conditions that are treated or have been treated by a professional?,Yes,9,1,1
+"Do you or does anyone in the household have lung cancer, kidney or liver failure, heart disease, or a substance use disorder?",No,10,0,0
+"Do you or does anyone in the household have lung cancer, kidney or liver failure, heart disease, or a substance use disorder?","Yes, 1",10,1,0.5
+"Do you or does anyone in the household have lung cancer, kidney or liver failure, heart disease, or a substance use disorder?","Yes, 2 or more",10,2,1
+Is the lack of housing making it hard to get to a doctor's office or take prescribed medications?,No,11,0,0
+Is the lack of housing making it hard to get to a doctor's office or take prescribed medications?,Data not collected (HUD),11,0,0
+Is the lack of housing making it hard to get to a doctor's office or take prescribed medications?,Yes (HUD),11,0,0
+Is the lack of housing making it hard to get to a doctor's office or take prescribed medications?,Yes,11,1,1
+Is the lack of housing making it hard to get to a doctor's office or take prescribed medications?,No (HUD),11,1,1
+Is the lack of housing making it hard to get to a doctor's office or take prescribed medications?,Covered by Health Insurance,11,order_vuln,NA
+What is the size of your household? (including you),1-2 people,12,0,0
+What is the size of your household? (including you),3 or more people,12,1,1
+Is anyone under 5 years old?,No,13,0,0
+Is anyone under 5 years old?,Yes,13,1,1
+Is anyone in the household pregnant?,No,14,0,0
+Is anyone in the household pregnant?,Yes,14,1,1
+"How many children under the age of 18 are not currently staying with your family, but would live with you? (if you have a home)",None,15,0,0
+"How many children under the age of 18 are not currently staying with your family, but would live with you? (if you have a home)",1 or more,15,1,1
+"How many adults 18 or older are not currently staying with your family, but would live with you? (if you have a home)",None,16,0,0
+"How many adults 18 or older are not currently staying with your family, but would live with you? (if you have a home)",1 or more,16,1,1

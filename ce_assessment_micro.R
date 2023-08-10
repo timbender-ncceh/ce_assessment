@@ -297,12 +297,12 @@ How many months have you been without a home, such as living outside or in a she
 Less than 3 months	0
 	
 Where did you sleep last night?	order_vuln
-Sheltered (ES, TH)	1
-Unsheltered	0
+Sheltered (ES, TH)	0
+Unsheltered	1
 	
 Where are you going to sleep tonight?	order_vuln
-Sheltered (ES, TH)	1
-Unsheltered	0
+Sheltered (ES, TH)	0
+Unsheltered	1
 	
 Are you currently experiencing or feel you are at risk of experiencing violence?	order_vuln
 No	0

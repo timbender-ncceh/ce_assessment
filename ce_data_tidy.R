@@ -68,10 +68,10 @@ Do you or does anyone in the household have lung cancer, kidney or liver failure
 No	0	0
 Yes, 1	1	0.5
 Yes, 2 or more	2	1
-Is the lack of housing making it hard to get to a doctor's office or take prescribed medications?	order_vuln	
+Is the lack of housing making it hard to get to a doctors office or take prescribed medications?	order_vuln	
 No	0	0
 Yes	1	1
-Covered by Health Insurance	order_vuln	
+Covered by Health Insurance?	order_vuln	
 Data not collected (HUD)	0	0
 No (HUD)	1	1
 Yes (HUD)	0	0
@@ -89,7 +89,10 @@ How many children under the age of 18 are not currently staying with your family
 None	0	0
 How many adults 18 or older are not currently staying with your family, but would live with you? (if you have a home)	order_vuln	
 1 or more	1	1
-None	0	0", 
+None	0	0
+Is anyone 55 years or older?	order_vuln	
+No	0	0
+Yes	1	1", 
                     col_names = F)
 
 qr_vuln <- mutate(qr_vuln, 
@@ -128,7 +131,13 @@ qr_vuln$order_vuln <- qr_vuln$order_vuln
 qr_vuln$order_vuln.norm <- qr_vuln$order_vuln.norm
 
 # add na values for each response
+qr_vuln$question %>% is.na() %>% any
+qr_vuln$response %>% is.na() %>% any
+qr_vuln$qnum %>% is.na() %>% any
+qr_vuln$order_vuln %>% is.na() %>% any
+qr_vuln$order_vuln.norm %>% is.na() %>% any
 
+qr_vuln[is.na(qr_vuln$order_vuln.norm),]
 # crosswalk vuln_group
 
 cw_vuln <- select(qr_vuln, question, qnum) %>%
@@ -149,7 +158,7 @@ write_csv(x = qr_vuln,
 
 # Deidentified Data----
 
-ce_in <- read_tsv("Client ID	Household ID	Race	Ethnicty	Gender	Entry Date	Exit Date	Region	Provider	Provider Updating	How long has it been since you lived in your own place?	How many months have you been without a home, such as living outside or in a shelter?	Where did you sleep last night?	Where are you going to sleep tonight?	Are you currently experiencing or feel you are at risk of experiencing violence?	Did you leave your previous or current living situation because you felt unsafe?	Have you ever experienced violence with someone close to you?	Have you experienced violence since becoming homeless?	Does anyone in your household have any physical or mental health conditions that are treated or have been treated by a professional?	Do you or does anyone in the household have lung cancer, kidney or liver failure, heart disease, or a substance use disorder?	Is the lack of housing making it hard to get to a doctorâ€™s office or take prescribed medications?	Covered by Health Insurance	What is the size of your household? (including you)	Is anyone under 5 years old?	Is anyone 55 years or older?	Is anyone in the household pregnant?	How many children under the age of 18 are not currently staying with your family, but would live with you? (if you have a home)	How many adults 18 or older are not currently staying with your family, but would live with you? (if you have a home)	Note
+ce_in <- read_tsv("Client ID	Household ID	Race	Ethnicty	Gender	Entry Date	Exit Date	Region	Provider	Provider Updating	How long has it been since you lived in your own place?	How many months have you been without a home, such as living outside or in a shelter?	Where did you sleep last night?	Where are you going to sleep tonight?	Are you currently experiencing or feel you are at risk of experiencing violence?	Did you leave your previous or current living situation because you felt unsafe?	Have you ever experienced violence with someone close to you?	Have you experienced violence since becoming homeless?	Does anyone in your household have any physical or mental health conditions that are treated or have been treated by a professional?	Do you or does anyone in the household have lung cancer, kidney or liver failure, heart disease, or a substance use disorder?	Is the lack of housing making it hard to get to a doctor office or take prescribed medications?	Covered by Health Insurance?	What is the size of your household? (including you)	Is anyone under 5 years old?	Is anyone 55 years or older?	Is anyone in the household pregnant?	How many children under the age of 18 are not currently staying with your family, but would live with you? (if you have a home)	How many adults 18 or older are not currently staying with your family, but would live with you? (if you have a home)	Note
 136715		White	Non-Hispanic	Male	6/20/2023	7/1/2023	R05	Union County Community Shelter - Union County - Emergency Adult Shelter - ES - State ESG	Union County Community Shelter - Union County - Emergency Adult Shelter - ES - State ESG	Less than 3 months	Less than 3 months	Sheltered (ES, TH)	Sheltered (ES, TH)	No	No	Yes	No	No	No	No	No (HUD)	1-2 people	No	No	No	1 or more	None	
 285031		Black	Non-Hispanic	Male	6/10/2023	7/1/2023	R05	Rowan Helping Ministries - Rowan County -  Emergency Shelter - ES - Private	Rowan Helping Ministries - Rowan County -  Emergency Shelter - ES - Private	36 months (3 years) or more	36 months (3 years) or more	Sheltered (ES, TH)	Sheltered (ES, TH)	Yes	Yes	No	Yes	Yes	Yes, 1	Yes	Yes (HUD)	1-2 people	No	No	No	None	None	
 297854		White	Non-Hispanic	Male	6/23/2023		R05	Rowan Helping Ministries - Rowan County -  Emergency Shelter - ES - Private	Rowan Helping Ministries - Rowan County -  Emergency Shelter - ES - Private	36 months (3 years) or more	36 months (3 years) or more	Sheltered (ES, TH)	Sheltered (ES, TH)	No	No	No	No	No	No	No	No (HUD)	1-2 people	No	No	No	None	None	

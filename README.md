@@ -13,4 +13,5 @@
 * ce_assessment_micro2.R
 * exploratory_data_analysis.R
 * cd_data_tidy.R: used to clean/tidy data from excel spreadsheet so that it can be used in model.  
-
+### Data Logs
+* ce_log.csv: a data file where outputs of mote carlo simulation runs are stored

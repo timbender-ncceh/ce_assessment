@@ -396,15 +396,26 @@ None	0", col_names = F,
     # 4. normalize responses----
     ov <- group_by(ov, question) %>%
       mutate(., 
+             #pct_v2 = min(order_vuln) / order_vuln,
              pct_v = order_vuln / max(order_vuln)) %>%
       ungroup() %>%
       .[,c("t_order", "question", "response", 
-           "order_vuln", "pct_v")]
+           "order_vuln", 
+           #"pct_v2",
+           "pct_v")]
     
     ce2 <- left_join(ce2, ov)
   }
   
   
+  
+  predict.lm(object = lm((c(3.157000421,
+                                1.386294361,
+                                4.356708827,
+                                2.140066163,
+                                0.405465108)) ~ (c(3,1,4,2,0))))
+  
+  #ov[grepl("^How long has it been since you lived", ov$question),][order(ov[grepl("^How long has it been since you lived", ov$question),]$t_order),]
   
   # 5. weigh normalized responses----
   df.weights <- data.frame(long_name = c("How long has it been since you lived in your own place?" ,                                                                            
@@ -462,21 +473,29 @@ None	0", col_names = F,
     summarise(comp_score = sum(comp_score)) %>%
     .[order(.$comp_score,decreasing = T),]
   
+  
+# normalize comp_score
+  #range(ce3$comp_score / max(ce3$comp_score)) 
+  ce3$comp_score.normalized <- max(ce3$comp_score) / ce3$comp_score
+  
   score.fingerprint <- unlist(lapply(df.weights$short_name, get)) %>%
     paste(., sep = "|", collapse = "|")
   
   score.sum.out <- ce3 %>%
     group_by(Race) %>%
-    summarise(avg_cs = mean(comp_score)#, 
+    summarise(avg_cs = mean(comp_score), 
+              avg_cs.n = mean(comp_score.normalized)#,
               #med_cs = median(comp_score), 
               # sd
     ) %>%
+    .[order(.$avg_cs),] %>%
     mutate(., 
            score_fingerprint = score.fingerprint) %>%
     as.data.table() %>%
     dcast(., 
           score_fingerprint ~ Race, 
-          value.var = "avg_cs")
+          #value.var = "avg_cs")
+          value.var = "avg_cs.n")
   
   
   readr::write_csv(x = score.sum.out, 
@@ -486,7 +505,7 @@ None	0", col_names = F,
   # plot clients----
   ggplot() + 
     geom_boxplot(data = ce3, 
-                 aes(x = Race, y = comp_score, group = Race))+
+                 aes(x = Race, y = comp_score.normalized, group = Race))+
     labs(title = "Composite Score by Race", 
          subtitle = glue("Sim Iteration #: {sim.fingerprint}"))
   
@@ -513,7 +532,7 @@ library(crayon)
 ggplot() + 
   geom_boxplot(data = ce3, 
                aes(x = Race, 
-                   y = comp_score, 
+                   y = comp_score.normalized, 
                    group = Race))+
   labs(title = "Composite Score by Race
        Optimized to Maximize Difference in Race", 
@@ -539,29 +558,30 @@ ggplot() +
   scale_y_discrete(name = "Survey Question / Group")+
   scale_x_continuous(name = "Weight Factor")
 
-ggplot() + 
-  geom_col(data = left_join(df.weights,qg2[,c(1:2)],by=c("long_name"="question")), 
-           aes(x = weight - min(weight), 
-               y = unlist(lapply(lapply(long_name, 
-                                        strwrap, 70), 
-                                 paste, 
-                                 collapse = "\n"))))+
-  facet_grid(group~., scales = "free_y", space = "free_y")+
-  labs(title = "Score Weights - Optimized to Maximize Difference 
-       in Race (ADJUSTED)", 
-       subtitle = glue("Sim Iteration #: {sim.fingerprint}"), 
-       caption = "This is the adjusted weights (all values increased by approximately +1.5). This
-       now reflect larger bars meaning larger vulnerabilites, in-line with our 
-       overall analysis*. (* Needs to be peer-reviewed and confirmed that this 
-       theory / approach is correct)")+
-  theme(strip.text.y = element_text(angle = 0))+
-  scale_y_discrete(name = "Survey Question / Group")+
-  scale_x_continuous(name = "Weight Factor")
+# ggplot() + 
+#   geom_col(data = left_join(df.weights,qg2[,c(1:2)],by=c("long_name"="question")), 
+#            aes(x = weight - min(weight), 
+#                y = unlist(lapply(lapply(long_name, 
+#                                         strwrap, 70), 
+#                                  paste, 
+#                                  collapse = "\n"))))+
+#   facet_grid(group~., scales = "free_y", space = "free_y")+
+#   labs(title = "Score Weights - Optimized to Maximize Difference 
+#        in Race (ADJUSTED)", 
+#        subtitle = glue("Sim Iteration #: {sim.fingerprint}"), 
+#        # caption = "This is the adjusted weights (all values increased by approximately +1.5). This
+#        # now reflect larger bars meaning larger vulnerabilites, in-line with our 
+#        # overall analysis*. (* Needs to be peer-reviewed and confirmed that this 
+#        # theory / approach is correct)")+
+#   )+
+#   theme(strip.text.y = element_text(angle = 0))+
+#   scale_y_discrete(name = "Survey Question / Group")+
+#   scale_x_continuous(name = "Weight Factor")
 
 
-cat(bgRed("I'm not confident I have this theory [above] correct on
-          dealing with negative weights\n\n"))
-Sys.sleep(10)
+# cat(bgRed("I'm not confident I have this theory [above] correct on
+#           dealing with negative weights\n\n"))
+# Sys.sleep(10)
 
 
 

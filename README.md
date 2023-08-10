@@ -2,7 +2,7 @@
 
 ## Master Input Tables 
 **(imported as data into model)**
-* MASTER_questions_vuln.csv
+* MASTER_questions_vuln.csv (click [here](https://github.com/timbender-ncceh/ce_assessment/blob/main/MASTER_questions_vuln.csv) to view, comment, edit or open an issue)
 * MASTER_crosswalk_vuln.csv
 *
 ## Master Model Parameters

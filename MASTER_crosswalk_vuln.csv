@@ -1,0 +1,17 @@
+question,qnum,vuln_group
+How long has it been since you lived in your own place?,1,Housing and Homeless History
+"How many months have you been without a home, such as living outside or in a shelter?",2,Housing and Homeless History
+Where did you sleep last night?,3,Housing and Homeless History
+Where are you going to sleep tonight?,4,Housing and Homeless History
+Are you currently experiencing or feel you are at risk of experiencing violence?,5,Risks
+Did you leave your previous or current living situation because you felt unsafe?,6,Risks
+Have you ever experienced violence with someone close to you?,7,Risks
+Have you experienced violence since becoming homeless?,8,Risks
+Does anyone in your household have any physical or mental health conditions that are treated or have been treated by a professional?,9,Health and Wellness
+"Do you or does anyone in the household have lung cancer, kidney or liver failure, heart disease, or a substance use disorder?",10,Health and Wellness
+Is the lack of housing making it hard to get to a doctor's office or take prescribed medications?,11,Health and Wellness
+What is the size of your household? (including you),12,Health and Wellness
+Is anyone under 5 years old?,13,Family Unit
+Is anyone in the household pregnant?,14,Family Unit
+"How many children under the age of 18 are not currently staying with your family, but would live with you? (if you have a home)",15,Family Unit
+"How many adults 18 or older are not currently staying with your family, but would live with you? (if you have a home)",16,Family Unit

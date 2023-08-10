@@ -21,6 +21,27 @@ library(janitor)
 setwd("C:/Users/TimBender/Documents/R/ncceh/projects/ce_assessment")
 rm(list=ls());cat('\f');gc()
 
+# Funs----
+ci <- function(samp_mean, moe){
+  samp_mean * moe
+}
+
+moe <- function(samp_sd, samp_size, z.score = 1.95){
+  #https://www.surveymonkey.com/mp/margin-of-error-calculator/
+  
+  zscore.df <- data.frame(desired_conf_lvl = c(.8,.85,.9, 
+                                               .95,.99), 
+                          dcl_pct = NA,
+                          z_score = c(1.28, 1.44,1.65,
+                                      1.96,2.58)) %>%
+    mutate(dcl_pct = scales::percent(desired_conf_lvl))
+  print(zscore.df)
+  
+  z.score * (samp_sd / sqrt(samp_size))
+}
+
+
+
 # metadata pull----
 sim.fingerprint <- openssl::md5(as.character(Sys.time())) %>%
   substr(., nchar(.) - 7, nchar(.))
@@ -431,6 +452,7 @@ ce2$comp_score <- ce2$weight * ce2$pct_v
 
 # Race / Ethnicity ----
 out_re <- ce2 %>%
+  #.[.$question == "Where are you going to sleep tonight?",] %>%
   group_by(Race, Ethnicty) %>%
   summarise() %>%
   ungroup() %>%
@@ -445,6 +467,57 @@ out_re <- ce2 %>%
          race_eth = ifelse(is.na(race_eth), 
                            "Other", race_eth))
 
+ce2 <- left_join(ce2[ce2$question == "Where are you going to sleep tonight?",],
+                 out_re)
+
+ce2$race_eth <- factor(ce2$race_eth, 
+                       levels = sort(unique(ce2$race_eth))[c(3,1,2)])
+
+# weighted sum model explanation-----
+library(stats)
+
+#https://or.stackexchange.com/questions/7835/use-the-weighted-sum-method-in-r
+
+df1<- structure(list(Student                = c("Student1", "Student2", "Student3", "Student4", "Student5"), 
+                     CGPA                   = c(9, 7.6, 8.2, 8.5, 9.3), 
+                     `Expected Stipend`     = c(12000L, 8500L, 9500L, 10000L, 14000L), 
+                     `Technical Exam Score` = c(72L, 68L, 63L, 70L, 72L), 
+                     `Aptitude Test Grade`  = c("B1", "B1", "B2", "A2", "A2")), 
+                class     = "data.frame", 
+                row.names = c(NA, -5L))
+
+# > df1
+# Student CGPA Expected Stipend Technical Exam Score Aptitude Test Grade
+# 1 Student1  9.0            12000                   72                  B1
+# 2 Student2  7.6             8500                   68                  B1
+# 3 Student3  8.2             9500                   63                  B2
+# 4 Student4  8.5            10000                   70                  A2
+# 5 Student5  9.3            14000                   72                  A2
+
+df1
+
+# Convert the grades to point values.
+df1 <- df1 |> mutate(`Aptitude Test Grade` = recode(`Aptitude Test Grade`, "A1" = 5, "A2" = 4, "B1" = 3, "B2" = 2, "C1" = 1))
+
+df1
+
+# Set up the vector of weights.
+weights <- c(0.3, 0.2, 0.25, 0.25)
+# Copy the data frame and scale each column appropriately.
+scaled <- df1 |>
+  mutate(CGPA = CGPA / max(CGPA),
+         `Expected Stipend` = min(`Expected Stipend`) / `Expected Stipend`,
+         `Technical Exam Score` = `Technical Exam Score` / max(`Technical Exam Score`),
+         `Aptitude Test Grade` = `Aptitude Test Grade` / max(`Aptitude Test Grade`)
+  )
+# Compute the weighted scores.
+scaled <- scaled |>
+  rowwise() |>
+  mutate(`Performance Score` = weighted.mean(c(CGPA, `Expected Stipend`, `Technical Exam Score`, `Aptitude Test Grade`), w = weights))
+# Assign ranks.
+scaled$Rank <- (nrow(scaled) + 1) - rank(scaled$`Performance Score`)
+# View the results.
+scaled %>% as.data.frame()
 
 
-# Gender
+janitor::clean_names(scaled)

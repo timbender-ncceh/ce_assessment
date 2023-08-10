@@ -1,8 +1,10 @@
 # ce_assessment
 
 ## Master Input Tables 
-[b](used as data sources for model)[b]
+**(imported as data into model)**
 * MASTER_questions_vuln.csv
 * MASTER_crosswalk_vuln.csv
-
-## Master 
+*
+## Master Model Parameters
+**(imported as data into the model)**
+* 

@@ -140,7 +140,7 @@ qr_vuln$order_vuln.norm %>% is.na() %>% any
 qr_vuln[is.na(qr_vuln$order_vuln.norm),]
 
 # short_name crosswalk
-left_join(q_vuln, 
+cw_shortname <- left_join(q_vuln, 
           data.frame(short_name = c("month_since_own_home" ,                 
   "months_since_any_home"   ,              
   "loc_sleep_last_night"     ,             
@@ -160,6 +160,10 @@ left_join(q_vuln,
   "non.hh_children"                       ,
   "non.hh_adults"), 
   qnum = c(1:14,18,15:17))) 
+
+write_csv(cw_shortname, 
+          "MASTER_cw_qshortname.csv")
+
 # crosswalk vuln_group----
 
 cw_vuln <- select(qr_vuln, question, qnum) %>%

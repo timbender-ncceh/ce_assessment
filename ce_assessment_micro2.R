@@ -24,9 +24,16 @@ rm(list=ls());cat('\f')
 clients <- read_csv("https://raw.githubusercontent.com/timbender-ncceh/ce_assessment/main/MASTER_client_deidentified.csv")
 cw_vuln <- read_csv("https://raw.githubusercontent.com/timbender-ncceh/ce_assessment/main/MASTER_crosswalk_vuln.csv")
 quest_vuln <- read_csv("https://raw.githubusercontent.com/timbender-ncceh/ce_assessment/main/MASTER_questions_vuln.csv")
+cw_qshortname <- read_csv("https://raw.githubusercontent.com/timbender-ncceh/ce_assessment/main/MASTER_cw_qshortname.csv")
 
-cw_vuln
-quest_vuln
+clients[is.na(clients$order_vuln),]
+
+# fix doctor issue
+lack.doctor <- "Is the lack of housing making it hard to get to a doctor office or take prescribed medications?"
+clients$question[grepl("doctor", clients$question)] <- lack.doctor
+cw_vuln$question[grepl("doctor", cw_vuln$question)] <- lack.doctor
+quest_vuln$question[grepl("doctor", quest_vuln$question)] <- lack.doctor
+cw_qshortname$question[grepl("doctor", cw_qshortname$question)] <- lack.doctor
 
 # Fix NAs
 clients$order_vuln[is.na(clients$order_vuln)] <- 0
@@ -55,6 +62,36 @@ hh_pregnant                           <- 1
 non.hh_children                       <- 1
 non.hh_adults                         <- 1
 
+# Build weight df
+weights.df <- cw_qshortname %>%
+  mutate(., 
+         weight_factor = NA)
+
+for(i in 1:nrow(weights.df)){
+  weights.df$weight_factor[i] <- get(weights.df$short_name[i])
+}
+
+
 # Multiply weights by vuln_norm
+out.score <- left_join(clients, 
+          select(weights.df, qnum, weight_factor)) %>%
+  mutate(., 
+         q_score = order_vuln.norm * weight_factor) %>%
+  group_by(client_id2, 
+           Region, 
+           Gender, 
+           Race, 
+           Ethnicty) %>%
+  summarise(comp_score = sum(q_score))
+
+out.score$comp_score %>% table
+
+left_join(clients, 
+          select(weights.df, qnum, weight_factor)) %>%
+  mutate(., 
+         q_score = order_vuln.norm * weight_factor) %>%
+  .[is.na(.$weight_factor),] %>%
+  group_by(question) %>%
+  summarise(n = n())
 
 # 

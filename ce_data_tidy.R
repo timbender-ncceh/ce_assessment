@@ -21,7 +21,7 @@ setwd("C:/Users/TimBender/Documents/R/ncceh/projects/ce_assessment")
 rm(list=ls());cat('\f')
 
 # Dataset----
-
+lack.doctor <- "Is the lack of housing making it hard to get to a doctor office or take prescribed medications?"
 # Data Dictionary----
 
 qr_vuln <- read_tsv("How long has it been since you lived in your own place?	order_vuln	normalized vulnerability
@@ -95,6 +95,9 @@ No	0	0
 Yes	1	1", 
                     col_names = F)
 
+qr_vuln$X1[grepl("doctor", qr_vuln$X1)] <- lack.doctor
+
+
 qr_vuln <- mutate(qr_vuln, 
                   type = ifelse(grepl("\\?", qr_vuln$X1), "question", "response"), 
                   qnum = NA_integer_)
@@ -113,10 +116,13 @@ for(i in 1:nrow(qr_vuln)){
 
 qr_vuln
 
-select(qr_vuln, question.response, type, qnum)
+select(qr_vuln, question.response, type, qnum) 
 
 q_vuln <- qr_vuln[qr_vuln$type == "question",] %>%
   select(., question.response, qnum)
+
+#q_vuln[grepl("doctor",q_vuln$question.response),]$question.response == lack.doctor
+
 colnames(q_vuln)[1] <- "question"
 qr_vuln <- left_join(qr_vuln, q_vuln) %>%
   .[.$type != "question",]
@@ -138,6 +144,9 @@ qr_vuln$order_vuln %>% is.na() %>% any
 qr_vuln$order_vuln.norm %>% is.na() %>% any
 
 qr_vuln[is.na(qr_vuln$order_vuln.norm),]
+
+#qr_vuln[grepl("doctor", qr_vuln$question),]$question == lack.doctor
+
 
 # short_name crosswalk
 cw_shortname <- left_join(q_vuln, 
@@ -161,6 +170,8 @@ cw_shortname <- left_join(q_vuln,
   "non.hh_adults"), 
   qnum = c(1:14,18,15:17))) 
 
+#cw_shortname[grepl("doctor",cw_shortname$question),]$question == lack.doctor
+
 write_csv(cw_shortname, 
           "MASTER_cw_qshortname.csv")
 
@@ -174,6 +185,9 @@ cw_vuln$vuln_group[cw_vuln$qnum %in% 1:4] <- "Housing and Homeless History"
 cw_vuln$vuln_group[cw_vuln$qnum %in% 5:8] <- "Risks"
 cw_vuln$vuln_group[cw_vuln$qnum %in% 9:12] <- "Health and Wellness"
 cw_vuln$vuln_group[cw_vuln$qnum %in% 13:18] <- "Family Unit"
+
+#cw_vuln$question[grepl("doctor",cw_vuln$question)] == lack.doctor
+
 
 write_csv(x = cw_vuln, 
           file = "MASTER_crosswalk_vuln.csv")
@@ -312,11 +326,12 @@ ce_in3 <- as.data.table(ce_in2) %>%
          client_id2, Region, Gender, Race, Ethnicty, question, response)
 
 ce_in3$client_id2 <- ce_in3$client_id2 %>% as.character() 
-
+#ce_in3[grepl("doctor", ce_in3$question),]$question == lack.doctor
 
 ce_in4 <- left_join(ce_in3, 
                     select(qr_vuln, question,response,qnum, order_vuln, order_vuln.norm))
 
+#ce_in4[grepl("doctor", ce_in4$question),]$question == lack.doctor
 
 
 write_csv(ce_in4, 

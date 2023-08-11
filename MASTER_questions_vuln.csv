@@ -26,8 +26,8 @@ Does anyone in your household have any physical or mental health conditions that
 "Do you or does anyone in the household have lung cancer, kidney or liver failure, heart disease, or a substance use disorder?",No,10,0,0
 "Do you or does anyone in the household have lung cancer, kidney or liver failure, heart disease, or a substance use disorder?","Yes, 1",10,1,0.5
 "Do you or does anyone in the household have lung cancer, kidney or liver failure, heart disease, or a substance use disorder?","Yes, 2 or more",10,2,1
-Is the lack of housing making it hard to get to a doctors office or take prescribed medications?,No,11,0,0
-Is the lack of housing making it hard to get to a doctors office or take prescribed medications?,Yes,11,1,1
+Is the lack of housing making it hard to get to a doctor office or take prescribed medications?,No,11,0,0
+Is the lack of housing making it hard to get to a doctor office or take prescribed medications?,Yes,11,1,1
 Covered by Health Insurance?,Data not collected (HUD),12,0,0
 Covered by Health Insurance?,Yes (HUD),12,0,0
 Covered by Health Insurance?,No (HUD),12,1,1

@@ -173,3 +173,8 @@ out10[out10$Race=="Black",] %>%
 
 out10[between(out10$pctR_in_t20,0.42,0.44),] 
 
+scales::percent(7:9/39)
+97*.2 * .43
+
+scales::percent((0:19)/19)
+

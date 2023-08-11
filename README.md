@@ -6,7 +6,7 @@
 * MASTER_questions_vuln.csv ([link](https://github.com/timbender-ncceh/ce_assessment/blob/main/MASTER_questions_vuln.csv) to view or open an issue)
 * MASTER_crosswalk_vuln.csv ([link](https://github.com/timbender-ncceh/ce_assessment/blob/main/MASTER_crosswalk_vuln.csv))
 * MASTER_cw_qshortname.csv
-* 
+* MASTER_client_deidentified.csv
 ### Model Parameters
 **(imported as data into the model)**
 * 

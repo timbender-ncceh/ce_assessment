@@ -51,27 +51,31 @@ quest_vuln$order_vuln[is.na(quest_vuln$order_vuln)] <- 0
 quest_vuln$order_vuln.norm[is.na(quest_vuln$order_vuln.norm)] <- 0
 
 # Vars----
-max.composite.score                  <- 18
+max.composite.score                     <- 1000
 
-# set weights
-month_since_own_home                  <- 1
-months_since_any_home                 <- 1
-loc_sleep_last_night                  <- 1
-loc_sleep_tonight                     <- 1
-now_or_at.risk_violence               <- 1
-leave_prev.curr_living_bc_felt_unsafe <- 1
-exp_violence_close                    <- 1
-exp_violence_homeless                 <- 1
-hh_phys.mntl_health_conds             <- 1
-hh_lung.kid.liv.heart.sud             <- 1
-hard_get_doctor_rx                    <- 1
-health_ins                            <- 1
-hh_size                               <- 1
-hh_anyone_5orUnder                    <- 1
-hh_anyone_55orOver                    <- 1
-hh_pregnant                           <- 1
-non.hh_children                       <- 1
-non.hh_adults                         <- 1
+if(!"override.weights" %in% ls()){
+  # set weights
+  month_since_own_home                  <- 1
+  months_since_any_home                 <- 1
+  loc_sleep_last_night                  <- 1
+  loc_sleep_tonight                     <- 1
+  now_or_at.risk_violence               <- 1
+  leave_prev.curr_living_bc_felt_unsafe <- 1
+  exp_violence_close                    <- 1
+  exp_violence_homeless                 <- 1
+  hh_phys.mntl_health_conds             <- 1
+  hh_lung.kid.liv.heart.sud             <- 1
+  hard_get_doctor_rx                    <- 1
+  health_ins                            <- 1
+  hh_size                               <- 1
+  hh_anyone_5orUnder                    <- 1
+  hh_anyone_55orOver                    <- 1
+  hh_pregnant                           <- 1
+  non.hh_children                       <- 1
+  non.hh_adults                         <- 1
+}
+
+
 
 # Build weight df
 weights.df <- cw_qshortname %>%
@@ -96,6 +100,9 @@ out.score <- left_join(clients,
   summarise(comp_score = sum(q_score)) %>%
   .[order(.$comp_score,decreasing = T),]
 
+# adjust scores greater than max composite score limit
+out.score$comp_score[out.score$comp_score > max.composite.score] <- max.composite.score
+
 # Clean for Maximum composite score
 
 # label top 20
@@ -103,7 +110,8 @@ out.score$top20 <- out.score$client_id2 %in% slice_max(ungroup(out.score),
           order_by = comp_score, 
           prop = 0.2)$client_id2
 
-out.score$weights <- weights.df[order(weights.df$qnum),]$weight_factor %>% 
+
+out.score$weights <- round(weights.df[order(weights.df$qnum),]$weight_factor,3) %>% 
   paste(., sep = "|", collapse = "|")
 out.score$sim_fp <- sim.fingerprint %>% as.character()
 

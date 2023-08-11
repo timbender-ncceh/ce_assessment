@@ -55,3 +55,6 @@ hh_pregnant                           <- -0.2541675#runif(n = 1, min = -1, max =
 non.hh_children                       <- -0.8760057#runif(n = 1, min = -1, max = 1) #sample(sample_choices,1) 
 non.hh_adults                         <- -0.6804583#runif(n = 1, min = -1, max = 1) #sample(sample_choices,1)
 
+# Multiply weights by vuln_norm
+
+# 

@@ -111,7 +111,7 @@ out.score$top20 <- out.score$client_id2 %in% slice_max(ungroup(out.score),
           prop = 0.2)$client_id2
 
 
-out.score$weights <- round(weights.df[order(weights.df$qnum),]$weight_factor,3) %>% 
+out.score$weights <- round(weights.df[order(weights.df$qnum),]$weight_factor,2) %>% 
   paste(., sep = "|", collapse = "|")
 out.score$sim_fp <- sim.fingerprint %>% as.character()
 

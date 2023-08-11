@@ -55,24 +55,24 @@ max.composite.score                     <- 1000
 
 if(!"override.weights" %in% ls()){
   # set weights
-  month_since_own_home                  <- 1
-  months_since_any_home                 <- 1
-  loc_sleep_last_night                  <- 1
-  loc_sleep_tonight                     <- 1
-  now_or_at.risk_violence               <- 1
-  leave_prev.curr_living_bc_felt_unsafe <- 1
-  exp_violence_close                    <- 1
-  exp_violence_homeless                 <- 1
-  hh_phys.mntl_health_conds             <- 1
-  hh_lung.kid.liv.heart.sud             <- 1
-  hard_get_doctor_rx                    <- 1
-  health_ins                            <- 1
-  hh_size                               <- 1
-  hh_anyone_5orUnder                    <- 1
-  hh_anyone_55orOver                    <- 1
-  hh_pregnant                           <- 1
-  non.hh_children                       <- 1
-  non.hh_adults                         <- 1
+  month_since_own_home                  <- 7
+  months_since_any_home                 <- 6
+  loc_sleep_last_night                  <- 6
+  loc_sleep_tonight                     <- 7
+  now_or_at.risk_violence               <- 6
+  leave_prev.curr_living_bc_felt_unsafe <- 4
+  exp_violence_close                    <- 3
+  exp_violence_homeless                 <- 5
+  hh_phys.mntl_health_conds             <- 7
+  hh_lung.kid.liv.heart.sud             <- 5
+  hard_get_doctor_rx                    <- 6
+  health_ins                            <- 3
+  hh_size                               <- 7
+  hh_anyone_5orUnder                    <- 4
+  hh_anyone_55orOver                    <- 6
+  hh_pregnant                           <- 6
+  non.hh_children                       <- 5
+  non.hh_adults                         <- 7
 }
 
 

@@ -22,6 +22,19 @@ library(janitor)
 setwd("C:/Users/TimBender/Documents/R/ncceh/projects/ce_assessment")
 rm(list=ls());cat('\f');gc()
 
+# Funs----
+con_weights <- function(w.in = mo.all$weights[sample(1:nrow(mo.all),size = 1)]){
+  out.wts <- w.in %>% 
+    strsplit(x = ., 
+             split = "\\|") %>%
+    unlist() %>%
+    as.numeric()
+  
+  out <- data.frame(qnum = 1:length(out.wts), 
+                    weight = out.wts)
+  
+  return(out)
+}
 
 # import data----
 mo.all <- read_csv("model_outputs2.csv") %>%
@@ -29,8 +42,8 @@ mo.all <- read_csv("model_outputs2.csv") %>%
 
 
 # filter to last model written
-for(i in unique(mo.all$sim_fp)){
-  mo <- mo.all[mo.all$sim_fp == i,]
+
+  mo <- mo.all[mo.all$sim_fp == last(mo.all$sim_fp),]
   
   mo$weights %>%  unique()
   
@@ -43,7 +56,7 @@ for(i in unique(mo.all$sim_fp)){
                      color = color1), 
                  position = "dodge")+
     scale_color_discrete(name = "Population Category")+
-    labs(title = "Unweighted Baseline Scores", 
+    labs(title = "Scores", 
          subtitle = NULL)
   
   
@@ -78,10 +91,12 @@ for(i in unique(mo.all$sim_fp)){
     geom_col(position = "dodge")+
     scale_y_continuous(labels = scales::percent, 
                        breaks = seq(0, 100, by = .10))+
-    labs(title = "Unweighted Outcomes", 
+    labs(title = "Outcomes", 
          subtitle = glue("model fingerprint: {unique(mo$sim_fp)}"))
   
-  
+
+Sys.sleep(10)
+
   out.E <- mo %>%
     group_by(top20,Ethnicty) %>%
     summarise(n = n()) %>%
@@ -118,7 +133,7 @@ for(i in unique(mo.all$sim_fp)){
          subtitle = glue("model fingerprint: {unique(mo$sim_fp)}"))
   
   mo$sim_fp %>% unique
-}
+#}
 mo.all %>%
   group_by(sim_fp,top20,Race) %>%
   summarise(n = n()) %>%
@@ -135,7 +150,10 @@ mo.all %>%
   mutate(., 
          t20divbyt100 = makeup_top20/makeup_top100)
 
+mo.all$weights %>% unique() %>% sort
+
 out10 <- mo.all %>%
+  .[.$weights != "1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1",] %>%
   group_by(sim_fp,top20,Race) %>%
   summarise(n = n()) %>%
   ungroup() %>%
@@ -171,10 +189,140 @@ out10[out10$Race=="Black",] %>%
              color = "orange")
 
 
-out10[between(out10$pctR_in_t20,0.42,0.44),] 
+best.sims <- out10[between(out10$pctR_in_t20,0.42,0.44),]$sim_fp
 
 scales::percent(7:9/39)
 97*.2 * .43
 
 scales::percent((0:19)/19)
 
+
+# analyze all----
+mq <- read_csv("https://raw.githubusercontent.com/timbender-ncceh/ce_assessment/main/MASTER_crosswalk_vuln.csv")
+cw_sn <- read_csv("https://raw.githubusercontent.com/timbender-ncceh/ce_assessment/main/MASTER_cw_qshortname.csv")
+
+
+in_range_scores <- NULL
+for(i in best.sims){
+  temp <- con_weights(w.in = unique(mo.all$weights[mo.all$sim_fp == i])) %>%
+    mutate(., 
+           fp = i)
+  in_range_scores <- rbind(in_range_scores, 
+                           temp)
+  rm(temp)
+}
+
+# sort into log() weights and not log() weights
+
+in_range_scores$weights_type <- ifelse(round(in_range_scores$weight,0) == 
+                                        in_range_scores$weight, 
+                                      "1:10", 
+                                      "log(1:10)")
+
+in_range_scores$weight %>% unique()
+
+in_range_scores %>%
+  left_join(., cw_sn) %>% 
+  left_join(., select(mq, vuln_group, qnum)) %>%
+  as_tibble() %>%
+  .[.$weights_type == "1:10",] %>%
+  ggplot(data = ., aes(x = short_name, 
+                       y = factor(weight, levels = as.character(0:10)))) + 
+  geom_bin2d()+
+  theme(axis.text.x = element_text(angle = 45, 
+                                   hjust = 1, vjust = 1))+
+  scale_fill_viridis_c(option = "C")+
+  facet_grid(~vuln_group, 
+             scales = "free", space = "free")
+
+in_range_scores %>%
+  left_join(., cw_sn) %>% 
+  left_join(., select(mq, vuln_group, qnum)) %>%
+  as_tibble() %>%
+  .[.$weights_type == "1:10",] %>%
+  ggplot(data = ., aes(x = short_name, 
+                       y = weight, 
+                       group = short_name)) + 
+  geom_boxplot() +
+  #geom_jitter(height = 0)+
+  facet_grid(~vuln_group, 
+             scales = "free", space = "free")+
+  theme(axis.text.x = element_text(angle = 45, 
+                                   hjust = 1, vjust = 1))
+  
+
+
+# sd analysis----
+
+sd.plot <- in_range_scores %>% 
+  .[.$weights_type == "1:10",] %>%
+  left_join(.,cw_sn) %>% 
+  left_join(., mq) %>% as_tibble() %>%
+  group_by(qnum, short_name, vuln_group) %>%
+  summarise(avg_w = mean(weight), 
+            sd_w = sd(weight)) 
+sd.plot$short_name_f <- factor(sd.plot$short_name, 
+                               levels = unique(sd.plot$short_name[order(sd.plot$sd_w)]))
+
+sd.plot$vuln_group_f <- factor(sd.plot$vuln_group, 
+                               levels = unique(sd.plot$vuln_group[order(sd.plot$sd_w)]))
+
+ggplot(data = sd.plot, 
+         aes(x = short_name_f, y = sd_w, 
+             fill = avg_w)) + 
+  scale_fill_viridis_c(option = "D", 
+                       limits = c(NA,NA), 
+                       name = "Average\nWeight")+
+  scale_y_continuous(name = "Standard Deviation of Weight") +
+  scale_x_discrete(name = "Questions\nFrom Least Deviation of Average to Most")+
+  geom_col() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
+  labs(title = "Simulations that Achieved 42% of 20% Goal: Output Weights.", 
+         subtitle = "Illustrating the Variability of Weights (Standard Deviation) and Average Weight by Question.")+
+  facet_grid(~vuln_group_f, scales = "free", space = "free")
+
+ggplot(data = sd.plot, 
+       aes(x = short_name_f, y = avg_w, 
+           fill = sd_w)) + 
+  scale_fill_viridis_c(option = "D", 
+                       limits = c(NA,NA), 
+                       name = "SD of\nWeight")+
+  scale_y_continuous(name = "Average Weight\n(Higher = more vulnerable)") +
+  scale_x_discrete(name = "Questions\nFrom Least Deviation of Average to Most")+
+  geom_col() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
+  labs(title = "Simulations that Achieved 42% of 20% Goal: Output Weights.", 
+       subtitle = "Illustrating the Variability of Weights (Standard Deviation) and Average Weight by Question")+
+  facet_grid(~vuln_group_f, scales = "free", space = "free")
+
+# show how the questions match up----
+library(igraph)
+
+
+irs <- in_range_scores %>%
+  left_join(., cw_sn) %>% 
+  left_join(., select(mq, vuln_group, qnum)) %>%
+  .[.$weights_type == "1:10",] %>%
+  as_tibble()
+
+irs %>%
+  group_by(fp, 
+           vuln_group) %>%
+  summarise(avg_wt = mean(weight), 
+            sd_wt = sd(weight)) %>%
+  group_by(fp) %>%
+  summarise(sd.sd_wt = sd(sd_wt)) %>%
+  .[complete.cases(.),] %>%
+  .[order(.$sd.sd_wt,decreasing = F),] %>%
+  ungroup() %>%
+  slice_min(., 
+            order_by = sd.sd_wt, 
+            n = 25) %>%
+  left_join(.,  irs) %>%
+  ggplot(data = ., 
+         aes(x = short_name, 
+             y = weight, group = 
+               short_name)) + 
+  geom_boxplot()+
+  facet_grid(~vuln_group, scales = "free", space = "free")+
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))

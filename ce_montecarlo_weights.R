@@ -6,7 +6,7 @@ library(readr)
 setwd("C:/Users/TimBender/Documents/R/ncceh/projects/ce_assessment")
 
 runit <- 0
-while(runit < 100){
+while(runit < 250){
   runit <- runit + 1
   
   rm(list=ls()[!ls() %in% c("runit")]);cat('\f');gc()
@@ -29,8 +29,7 @@ while(runit < 100){
   mc.weights <- read_csv("https://raw.githubusercontent.com/timbender-ncceh/ce_assessment/main/MASTER_cw_qshortname.csv")
   mc.weights$weight <- sample(weight.min:weight.max, 
                               size = nrow(mc.weights), 
-                              replace = T) %>%
-    log()
+                              replace = T) #%>% log()
   
   
   

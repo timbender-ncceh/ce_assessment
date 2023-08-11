@@ -138,7 +138,29 @@ qr_vuln$order_vuln %>% is.na() %>% any
 qr_vuln$order_vuln.norm %>% is.na() %>% any
 
 qr_vuln[is.na(qr_vuln$order_vuln.norm),]
-# crosswalk vuln_group
+
+# short_name crosswalk
+left_join(q_vuln, 
+          data.frame(short_name = c("month_since_own_home" ,                 
+  "months_since_any_home"   ,              
+  "loc_sleep_last_night"     ,             
+  "loc_sleep_tonight"         ,            
+  "now_or_at.risk_violence"    ,           
+  "leave_prev.curr_living_bc_felt_unsafe" ,
+  "exp_violence_close"                    ,
+  "exp_violence_homeless"                 ,
+  "hh_phys.mntl_health_conds"             ,
+  "hh_lung.kid.liv.heart.sud"             ,
+  "hard_get_doctor_rx"                    ,
+  "health_ins"                            ,
+  "hh_size"                               ,
+  "hh_anyone_5orUnder"                    ,
+  "hh_anyone_55orOver"                    ,
+  "hh_pregnant"                           ,
+  "non.hh_children"                       ,
+  "non.hh_adults"), 
+  qnum = c(1:14,18,15:17))) 
+# crosswalk vuln_group----
 
 cw_vuln <- select(qr_vuln, question, qnum) %>%
   .[!duplicated(.),] %>%

@@ -1,0 +1,19 @@
+question,qnum,short_name
+How long has it been since you lived in your own place?,1,month_since_own_home
+"How many months have you been without a home, such as living outside or in a shelter?",2,months_since_any_home
+Where did you sleep last night?,3,loc_sleep_last_night
+Where are you going to sleep tonight?,4,loc_sleep_tonight
+Are you currently experiencing or feel you are at risk of experiencing violence?,5,now_or_at.risk_violence
+Did you leave your previous or current living situation because you felt unsafe?,6,leave_prev.curr_living_bc_felt_unsafe
+Have you ever experienced violence with someone close to you?,7,exp_violence_close
+Have you experienced violence since becoming homeless?,8,exp_violence_homeless
+Does anyone in your household have any physical or mental health conditions that are treated or have been treated by a professional?,9,hh_phys.mntl_health_conds
+"Do you or does anyone in the household have lung cancer, kidney or liver failure, heart disease, or a substance use disorder?",10,hh_lung.kid.liv.heart.sud
+Is the lack of housing making it hard to get to a doctors office or take prescribed medications?,11,hard_get_doctor_rx
+Covered by Health Insurance?,12,health_ins
+What is the size of your household? (including you),13,hh_size
+Is anyone under 5 years old?,14,hh_anyone_5orUnder
+Is anyone in the household pregnant?,15,hh_pregnant
+"How many children under the age of 18 are not currently staying with your family, but would live with you? (if you have a home)",16,non.hh_children
+"How many adults 18 or older are not currently staying with your family, but would live with you? (if you have a home)",17,non.hh_adults
+Is anyone 55 years or older?,18,hh_anyone_55orOver

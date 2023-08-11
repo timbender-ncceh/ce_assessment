@@ -43,7 +43,7 @@ ggplot() +
        subtitle = NULL)
 
 
-out <- mo %>%
+out.R <- mo %>%
   group_by(top20,Race) %>%
   summarise(n = n()) %>%
   ungroup() %>%
@@ -55,10 +55,13 @@ out <- mo %>%
   mutate(makeup_top20 = `TRUE` / sum(`TRUE`), 
          makeup_top100 = `FALSE` / sum(`FALSE`))
 
-colnames(out) <- c("Race", "n_t100", "n_t20", 
+colnames(out.R) <- c("Race", "n_t100", "n_t20", 
                    "makeup_t20", "makeup_t100")
 library(glue)
-select(out, Race, makeup_t20, makeup_t100) %>%
+
+print(out.R)
+
+select(out.R, Race, makeup_t20, makeup_t100) %>%
   as.data.table() %>%
   melt(., id.vars = "Race") %>%
   ggplot(data = ., 
@@ -67,4 +70,36 @@ select(out, Race, makeup_t20, makeup_t100) %>%
   scale_y_continuous(labels = scales::percent, 
                      breaks = seq(0, 100, by = .10))+
   labs(title = "Unweighted Outcomes", 
-       subtitle = glue())
+       subtitle = glue("model fingerprint: {unique(mo$sim_fp)}"))
+
+
+out.E <- mo %>%
+  group_by(top20,Ethnicty) %>%
+  summarise(n = n()) %>%
+  ungroup() %>%
+  as.data.table() %>%
+  dcast(., 
+        Ethnicty ~ top20, 
+        fill = 0) %>%
+  as.data.frame() %>%
+  mutate(makeup_top20 = `TRUE` / sum(`TRUE`), 
+         makeup_top100 = `FALSE` / sum(`FALSE`))
+
+colnames(out.E) <- c("Ethnicty", "n_t100", "n_t20", 
+                     "makeup_t20", "makeup_t100")
+library(glue)
+
+print(out.E)
+
+select(out.E, Ethnicty, makeup_t20, makeup_t100) %>%
+  as.data.table() %>%
+  melt(., id.vars = "Ethnicty") %>%
+  ggplot(data = ., 
+         aes(x = Ethnicty, y = value, fill = variable)) + 
+  geom_col(position = "dodge")+
+  scale_y_continuous(labels = scales::percent, 
+                     breaks = seq(0, 100, by = .10))+
+  labs(title = "Unweighted Outcomes", 
+       subtitle = glue("model fingerprint: {unique(mo$sim_fp)}"))
+
+mo$sim_fp %>% unique

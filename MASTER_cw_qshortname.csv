@@ -9,7 +9,7 @@ Have you ever experienced violence with someone close to you?,7,exp_violence_clo
 Have you experienced violence since becoming homeless?,8,exp_violence_homeless
 Does anyone in your household have any physical or mental health conditions that are treated or have been treated by a professional?,9,hh_phys.mntl_health_conds
 "Do you or does anyone in the household have lung cancer, kidney or liver failure, heart disease, or a substance use disorder?",10,hh_lung.kid.liv.heart.sud
-Is the lack of housing making it hard to get to a doctors office or take prescribed medications?,11,hard_get_doctor_rx
+Is the lack of housing making it hard to get to a doctor office or take prescribed medications?,11,hard_get_doctor_rx
 Covered by Health Insurance?,12,health_ins
 What is the size of your household? (including you),13,hh_size
 Is anyone under 5 years old?,14,hh_anyone_5orUnder

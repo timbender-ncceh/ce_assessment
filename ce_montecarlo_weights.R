@@ -17,6 +17,27 @@ git.raw.md5 <- read_file("https://raw.githubusercontent.com/timbender-ncceh/ncce
 gc()
 
 # set weights----
+override.weights <- T
+
+weight.min <- 1
+weight.max <- 10
+
+mc.weights <- read_csv("https://raw.githubusercontent.com/timbender-ncceh/ce_assessment/main/MASTER_cw_qshortname.csv")
+mc.weights$weight <- sample(weight.min:weight.max, 
+                            size = nrow(mc.weights), 
+                            replace = T) %>%
+  log()
+
+
+
+
+
+for(i in 1:nrow(mc.weights)){
+  assign(x = mc.weights$short_name[i], 
+         value = mc.weights$weight[i])
+}
 
 # run model----
+
 source("https://raw.githubusercontent.com/timbender-ncceh/ce_assessment/main/ce_assessment_micro2.R")
+rm(override.weights)

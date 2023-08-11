@@ -29,6 +29,7 @@ mo <- read_csv("model_outputs2.csv")
 # filter to last model written
 mo <- mo[mo$sim_fp == last(mo$sim_fp),]
 
+mo$weights %>%  unique()
 
 
 ggplot() + 

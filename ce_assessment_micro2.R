@@ -18,7 +18,7 @@ library(janitor)
 
 setwd("C:/Users/TimBender/Documents/R/ncceh/projects/ce_assessment")
 
-rm(list=ls());cat('\f')
+#rm(list=ls());cat('\f')
 
 # fingerprint----
 sim.fingerprint <- openssl::md5(as.character(Sys.time())) %>%
@@ -49,6 +49,9 @@ clients$order_vuln.norm[is.na(clients$order_vuln.norm)] <- 0
 
 quest_vuln$order_vuln[is.na(quest_vuln$order_vuln)] <- 0
 quest_vuln$order_vuln.norm[is.na(quest_vuln$order_vuln.norm)] <- 0
+
+# Vars----
+max.composite.score                  <- 18
 
 # set weights
 month_since_own_home                  <- 1
@@ -93,7 +96,7 @@ out.score <- left_join(clients,
   summarise(comp_score = sum(q_score)) %>%
   .[order(.$comp_score,decreasing = T),]
 
-
+# Clean for Maximum composite score
 
 # label top 20
 out.score$top20 <- out.score$client_id2 %in% slice_max(ungroup(out.score), 
@@ -103,6 +106,7 @@ out.score$top20 <- out.score$client_id2 %in% slice_max(ungroup(out.score),
 out.score$weights <- weights.df[order(weights.df$qnum),]$weight_factor %>% 
   paste(., sep = "|", collapse = "|")
 out.score$sim_fp <- sim.fingerprint %>% as.character()
+
 
 
 # write_out 

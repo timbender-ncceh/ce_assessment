@@ -20,13 +20,21 @@ setwd("C:/Users/TimBender/Documents/R/ncceh/projects/ce_assessment")
 
 rm(list=ls());cat('\f')
 
+# fingerprint----
+sim.fingerprint <- openssl::md5(as.character(Sys.time())) %>%
+  substr(., nchar(.) - 7, nchar(.))
+
+git.raw.md5 <- read_file("https://raw.githubusercontent.com/timbender-ncceh/ncceh_data_tools/main/ce_assessment_micro.R") %>%
+  md5
+gc()
+
 # import data from GitHub----
 clients <- read_csv("https://raw.githubusercontent.com/timbender-ncceh/ce_assessment/main/MASTER_client_deidentified.csv")
 cw_vuln <- read_csv("https://raw.githubusercontent.com/timbender-ncceh/ce_assessment/main/MASTER_crosswalk_vuln.csv")
 quest_vuln <- read_csv("https://raw.githubusercontent.com/timbender-ncceh/ce_assessment/main/MASTER_questions_vuln.csv")
 cw_qshortname <- read_csv("https://raw.githubusercontent.com/timbender-ncceh/ce_assessment/main/MASTER_cw_qshortname.csv")
 
-clients[is.na(clients$order_vuln),]
+#clients[is.na(clients$order_vuln),]
 
 # fix doctor issue
 lack.doctor <- "Is the lack of housing making it hard to get to a doctor office or take prescribed medications?"
@@ -82,16 +90,23 @@ out.score <- left_join(clients,
            Gender, 
            Race, 
            Ethnicty) %>%
-  summarise(comp_score = sum(q_score))
+  summarise(comp_score = sum(q_score)) %>%
+  .[order(.$comp_score,decreasing = T),]
 
-out.score$comp_score %>% table
 
-left_join(clients, 
-          select(weights.df, qnum, weight_factor)) %>%
-  mutate(., 
-         q_score = order_vuln.norm * weight_factor) %>%
-  .[is.na(.$weight_factor),] %>%
-  group_by(question) %>%
-  summarise(n = n())
 
-# 
+# label top 20
+out.score$top20 <- out.score$client_id2 %in% slice_max(ungroup(out.score), 
+          order_by = comp_score, 
+          prop = 0.2)$client_id2
+
+out.score$weights <- weights.df[order(weights.df$qnum),]$weight_factor %>% 
+  paste(., sep = "|", collapse = "|")
+out.score$sim_fp <- sim.fingerprint %>% as.character()
+
+
+# write_out 
+
+write_csv(x = out.score, 
+          file = "model_outputs2.csv", 
+          append = T)

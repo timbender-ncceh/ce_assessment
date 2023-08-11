@@ -17,12 +17,10 @@ library(janitor)
 # unnest()
 # clean_names()
 # 
-runit <- 0
-while(runit < 10){
-  runit <- runit + 1
+
   
   setwd("C:/Users/TimBender/Documents/R/ncceh/projects/ce_assessment")
-  rm(list=ls());cat('\f');gc()
+  rm(list=ls()[!ls() %in% c("runit")]);cat('\f');gc()
   
   
   # import data----
@@ -119,7 +117,7 @@ while(runit < 10){
   
   mo$sim_fp %>% unique
   
-}
+
 
 
 

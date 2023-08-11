@@ -5,12 +5,11 @@ library(readr)
 
 setwd("C:/Users/TimBender/Documents/R/ncceh/projects/ce_assessment")
 
-
 runit <- 0
-while(runit < 10){
+while(runit < 100){
   runit <- runit + 1
   
-  rm(list=ls());cat('\f');gc()
+  rm(list=ls()[!ls() %in% c("runit")]);cat('\f');gc()
   
   
   # fingerprints----

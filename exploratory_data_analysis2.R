@@ -18,17 +18,19 @@ library(janitor)
 # clean_names()
 # 
 
-  
-  setwd("C:/Users/TimBender/Documents/R/ncceh/projects/ce_assessment")
-  rm(list=ls()[!ls() %in% c("runit")]);cat('\f');gc()
-  
-  
-  # import data----
-  mo <- read_csv("model_outputs2.csv")
-  
-  
-  # filter to last model written
-  mo <- mo[mo$sim_fp == last(mo$sim_fp),]
+
+setwd("C:/Users/TimBender/Documents/R/ncceh/projects/ce_assessment")
+rm(list=ls());cat('\f');gc()
+
+
+# import data----
+mo.all <- read_csv("model_outputs2.csv") %>%
+  .[!duplicated(.),]
+
+
+# filter to last model written
+for(i in unique(mo.all$sim_fp)){
+  mo <- mo.all[mo.all$sim_fp == i,]
   
   mo$weights %>%  unique()
   
@@ -116,9 +118,58 @@ library(janitor)
          subtitle = glue("model fingerprint: {unique(mo$sim_fp)}"))
   
   mo$sim_fp %>% unique
-  
+}
+mo.all %>%
+  group_by(sim_fp,top20,Race) %>%
+  summarise(n = n()) %>%
+  ungroup() %>%
+  group_by(sim_fp) %>%
+  as.data.table() %>%
+  dcast(., 
+        sim_fp + Race ~ top20, 
+        fill = 0) %>%
+  as.data.frame() %>%
+  mutate(makeup_top20 = `TRUE` / sum(`TRUE`), 
+         makeup_top100 = `FALSE` / sum(`FALSE`)) %>%
+  .[.$Race == "Black",] %>%
+  mutate(., 
+         t20divbyt100 = makeup_top20/makeup_top100)
+
+out10 <- mo.all %>%
+  group_by(sim_fp,top20,Race) %>%
+  summarise(n = n()) %>%
+  ungroup() %>%
+  group_by(sim_fp) %>%
+  as.data.table() %>%
+  dcast(., 
+        sim_fp + Race ~ top20, 
+        fill = 0)
+colnames(out10) <- c("sim_fp", "Race", "bottom80", "top20")
+out10$sim_fp <- factor(out10$sim_fp)
 
 
+out10 <- as.data.frame(out10) %>% ungroup() 
+
+for(i in 1:nrow(out10)){
+  out10$race100[i]      <- out10$bottom80[i] + out10$top20[i]
+  out10$pctR_in_t20[i]  <- out10$top20[i]    / sum(out10$top20[out10$sim_fp == out10$sim_fp[i]])
+  out10$pctR_in_t100[i] <- out10$race100[i]  / sum(out10$race100[out10$sim_fp == out10$sim_fp[i]])
+}
+
+out10[out10$Race=="Black",] %>%
+  ggplot(data = ., 
+         aes(x = Race, y = pctR_in_t20, 
+             group = Race)) + 
+  geom_violin()+
+  geom_jitter(height = 0)+
+  scale_y_continuous(limits = c(0,1), 
+                     breaks = seq(0,1,by=0.1), 
+                     labels = scales::percent) +
+  geom_hline(aes(yintercept = 0.43), 
+             linewidth = 5, 
+             alpha = 0.3, 
+             color = "orange")
 
 
+out10[between(out10$pctR_in_t20,0.42,0.44),] 
 

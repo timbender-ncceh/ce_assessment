@@ -6,7 +6,7 @@ library(readr)
 setwd("C:/Users/TimBender/Documents/R/ncceh/projects/ce_assessment")
 
 runit <- 0
-while(runit < 250){
+while(runit < 500){
   runit <- runit + 1
   
   rm(list=ls()[!ls() %in% c("runit")]);cat('\f');gc()

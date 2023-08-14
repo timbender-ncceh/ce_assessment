@@ -43,96 +43,96 @@ mo.all <- read_csv("model_outputs2.csv") %>%
 
 # filter to last model written
 
-  mo <- mo.all[mo.all$sim_fp == last(mo.all$sim_fp),]
-  
-  mo$weights %>%  unique()
-  
-  
-  ggplot() + 
-    geom_boxplot(data = mutate(rbind(mutate(mo, top20 = F),mo[mo$top20,]),
-                               color1 = ifelse(top20, "Top 20% of Pop", 
-                                               "100% of Pop")), 
-                 aes(x = Race, y = comp_score, #group = Race, 
-                     color = color1), 
-                 position = "dodge")+
-    scale_color_discrete(name = "Population Category")+
-    labs(title = "Scores", 
-         subtitle = NULL)
-  
-  
-  out.R <- mo %>%
-    group_by(top20,Race) %>%
-    summarise(n = n()) %>%
-    ungroup() %>%
-    as.data.table() %>%
-    dcast(., 
-          Race ~ top20, 
-          fill = 0) %>%
-    as.data.frame() %>%
-    mutate(makeup_top20 = `TRUE` / sum(`TRUE`), 
-           makeup_top100 = `FALSE` / sum(`FALSE`))
-  
-  colnames(out.R) <- c("Race", "n_t100", "n_t20", 
-                       "makeup_t20", "makeup_t100")
-  library(glue)
-  
-  print(out.R)
-  
-  if(between(out.R[out.R$Race == "Black",]$makeup_t100 / 
-             out.R[out.R$Race == "Black",]$makeup_t20  ,0.97,1.07)){
-    stop("we got one - Race")
-  }
-  
-  select(out.R, Race, makeup_t20, makeup_t100) %>%
-    as.data.table() %>%
-    melt(., id.vars = "Race") %>%
-    ggplot(data = ., 
-           aes(x = Race, y = value, fill = variable)) + 
-    geom_col(position = "dodge")+
-    scale_y_continuous(labels = scales::percent, 
-                       breaks = seq(0, 100, by = .10))+
-    labs(title = "Outcomes", 
-         subtitle = glue("model fingerprint: {unique(mo$sim_fp)}"))
-  
+mo <- mo.all[mo.all$sim_fp == last(mo.all$sim_fp),]
+
+mo$weights %>%  unique()
+
+
+ggplot() + 
+  geom_boxplot(data = mutate(rbind(mutate(mo, top20 = F),mo[mo$top20,]),
+                             color1 = ifelse(top20, "Top 20% of Pop", 
+                                             "100% of Pop")), 
+               aes(x = Race, y = comp_score, #group = Race, 
+                   color = color1), 
+               position = "dodge")+
+  scale_color_discrete(name = "Population Category")+
+  labs(title = "Scores", 
+       subtitle = NULL)
+
+
+out.R <- mo %>%
+  group_by(top20,Race) %>%
+  summarise(n = n()) %>%
+  ungroup() %>%
+  as.data.table() %>%
+  dcast(., 
+        Race ~ top20, 
+        fill = 0) %>%
+  as.data.frame() %>%
+  mutate(makeup_top20 = `TRUE` / sum(`TRUE`), 
+         makeup_top100 = `FALSE` / sum(`FALSE`))
+
+colnames(out.R) <- c("Race", "n_t100", "n_t20", 
+                     "makeup_t20", "makeup_t100")
+library(glue)
+
+print(out.R)
+
+if(between(out.R[out.R$Race == "Black",]$makeup_t100 / 
+           out.R[out.R$Race == "Black",]$makeup_t20  ,0.97,1.07)){
+  stop("we got one - Race")
+}
+
+select(out.R, Race, makeup_t20, makeup_t100) %>%
+  as.data.table() %>%
+  melt(., id.vars = "Race") %>%
+  ggplot(data = ., 
+         aes(x = Race, y = value, fill = variable)) + 
+  geom_col(position = "dodge")+
+  scale_y_continuous(labels = scales::percent, 
+                     breaks = seq(0, 100, by = .10))+
+  labs(title = "Outcomes", 
+       subtitle = glue("model fingerprint: {unique(mo$sim_fp)}"))
+
 
 Sys.sleep(10)
 
-  out.E <- mo %>%
-    group_by(top20,Ethnicty) %>%
-    summarise(n = n()) %>%
-    ungroup() %>%
-    as.data.table() %>%
-    dcast(., 
-          Ethnicty ~ top20, 
-          fill = 0) %>%
-    as.data.frame() %>%
-    mutate(makeup_top20 = `TRUE` / sum(`TRUE`), 
-           makeup_top100 = `FALSE` / sum(`FALSE`))
-  
-  colnames(out.E) <- c("Ethnicty", "n_t100", "n_t20", 
-                       "makeup_t20", "makeup_t100")
-  library(glue)
-  
-  print(out.E)
-  
-  if(between(out.E[out.E$Ethnicty == "Hispanic",]$makeup_t100 / 
-             out.E[out.E$Ethnicty == "Hispanic",]$makeup_t20  ,0.97,1.07)){
-    stop("we got one - Race")
-  }
-  
-  
-  select(out.E, Ethnicty, makeup_t20, makeup_t100) %>%
-    as.data.table() %>%
-    melt(., id.vars = "Ethnicty") %>%
-    ggplot(data = ., 
-           aes(x = Ethnicty, y = value, fill = variable)) + 
-    geom_col(position = "dodge")+
-    scale_y_continuous(labels = scales::percent, 
-                       breaks = seq(0, 100, by = .10))+
-    labs(title = "Unweighted Outcomes", 
-         subtitle = glue("model fingerprint: {unique(mo$sim_fp)}"))
-  
-  mo$sim_fp %>% unique
+out.E <- mo %>%
+  group_by(top20,Ethnicty) %>%
+  summarise(n = n()) %>%
+  ungroup() %>%
+  as.data.table() %>%
+  dcast(., 
+        Ethnicty ~ top20, 
+        fill = 0) %>%
+  as.data.frame() %>%
+  mutate(makeup_top20 = `TRUE` / sum(`TRUE`), 
+         makeup_top100 = `FALSE` / sum(`FALSE`))
+
+colnames(out.E) <- c("Ethnicty", "n_t100", "n_t20", 
+                     "makeup_t20", "makeup_t100")
+library(glue)
+
+print(out.E)
+
+if(between(out.E[out.E$Ethnicty == "Hispanic",]$makeup_t100 / 
+           out.E[out.E$Ethnicty == "Hispanic",]$makeup_t20  ,0.97,1.07)){
+  stop("we got one - Race")
+}
+
+
+select(out.E, Ethnicty, makeup_t20, makeup_t100) %>%
+  as.data.table() %>%
+  melt(., id.vars = "Ethnicty") %>%
+  ggplot(data = ., 
+         aes(x = Ethnicty, y = value, fill = variable)) + 
+  geom_col(position = "dodge")+
+  scale_y_continuous(labels = scales::percent, 
+                     breaks = seq(0, 100, by = .10))+
+  labs(title = "Unweighted Outcomes", 
+       subtitle = glue("model fingerprint: {unique(mo$sim_fp)}"))
+
+mo$sim_fp %>% unique
 #}
 mo.all %>%
   group_by(sim_fp,top20,Race) %>%
@@ -215,11 +215,11 @@ for(i in best.sims){
 # sort into log() weights and not log() weights
 
 in_range_scores$weights_type <- ifelse(round(in_range_scores$weight,0) == 
-                                        in_range_scores$weight, 
-                                      "1:10", 
-                                      "log(1:10)")
+                                         in_range_scores$weight, 
+                                       "1:10", 
+                                       "log(1:10)")
 
-in_range_scores$weight %>% unique()
+in_range_scores$weight %>% unique() %>% sort() %>% plot()
 
 in_range_scores %>%
   left_join(., cw_sn) %>% 
@@ -249,7 +249,7 @@ in_range_scores %>%
              scales = "free", space = "free")+
   theme(axis.text.x = element_text(angle = 45, 
                                    hjust = 1, vjust = 1))
-  
+
 
 
 # sd analysis----
@@ -268,8 +268,8 @@ sd.plot$vuln_group_f <- factor(sd.plot$vuln_group,
                                levels = unique(sd.plot$vuln_group[order(sd.plot$sd_w)]))
 
 ggplot(data = sd.plot, 
-         aes(x = short_name_f, y = sd_w, 
-             fill = avg_w)) + 
+       aes(x = short_name_f, y = sd_w, 
+           fill = avg_w)) + 
   scale_fill_viridis_c(option = "D", 
                        limits = c(NA,NA), 
                        name = "Average\nWeight")+
@@ -278,7 +278,7 @@ ggplot(data = sd.plot,
   geom_col() +
   theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
   labs(title = "Simulations that Achieved 42% of 20% Goal: Output Weights.", 
-         subtitle = "Illustrating the Variability of Weights (Standard Deviation) and Average Weight by Question.")+
+       subtitle = "Illustrating the Variability of Weights (Standard Deviation) and Average Weight by Question.")+
   facet_grid(~vuln_group_f, scales = "free", space = "free")
 
 ggplot(data = sd.plot, 
@@ -326,3 +326,57 @@ irs %>%
   geom_boxplot()+
   facet_grid(~vuln_group, scales = "free", space = "free")+
   theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+
+
+# look at race across all simulations----
+mo.all <- read_csv("model_outputs2.csv") %>%
+  .[!duplicated(.),]
+
+
+mo2 <- mo.all %>%
+  .[.$top20,] %>%
+  group_by(sim_fp, top20, Race) %>%
+  summarise(t_score = sum(top20)) %>%
+  as.data.table() %>%
+  dcast(., 
+        sim_fp ~ Race, value.var = "t_score", 
+        fill = 0) %>%
+  melt(., 
+       id.vars = "sim_fp", 
+       value.name = "t_score", variable.name = "race") %>%
+  as.data.frame() %>%
+  group_by(., sim_fp) %>%
+  mutate(., 
+         pct.t_score = t_score/sum(t_score)) %>%
+  .[order(.$sim_fp),]
+
+
+mo2
+
+goal43x20.fp <- mo2[mo2$race == "Black" & 
+                      mo2$t_score == 8,]$sim_fp
+
+
+mo3 <- mo2[mo2$sim_fp %in% goal43x20.fp,]
+
+fp.baseline <- first(mo$sim_fp)
+mo.bl <- mo2[mo2$sim_fp == fp.baseline,]
+
+
+b2_other_races <- NA
+#mo[mo$sim_fp == fp.baseline,] %>%
+mo3 %>%
+  as.data.table() %>%
+  dcast(., 
+        sim_fp ~ race, value.var = "t_score" , 
+        fun.aggregate = sum) %>%
+  as.data.frame() %>%
+  group_by(Asian, Black, Indigenous, 
+           mr = `Multiple Races`, White) %>%
+  summarise(n = n()) %>%
+  .[.$Indigenous  > 0 | 
+      .$mr > 0 | .$Asian > 0,] %>%
+  .[.$White %in% c(9),]
+
+mo 
+mo3

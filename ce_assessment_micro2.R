@@ -55,24 +55,24 @@ max.composite.score                     <- 1000
 
 if(!"override.weights" %in% ls()){
   # set weights
-  month_since_own_home                  <- 1#7
-  months_since_any_home                 <- 1#6
-  loc_sleep_last_night                  <- 1#6
-  loc_sleep_tonight                     <- 1#7
-  now_or_at.risk_violence               <- 1#6
-  leave_prev.curr_living_bc_felt_unsafe <- 1#4
-  exp_violence_close                    <- 1#3
-  exp_violence_homeless                 <- 1#5
-  hh_phys.mntl_health_conds             <- 1#7
-  hh_lung.kid.liv.heart.sud             <- 1#5
-  hard_get_doctor_rx                    <- 1#6
-  health_ins                            <- 1#3
-  hh_size                               <- 1#7
-  hh_anyone_5orUnder                    <- 1#4
-  hh_anyone_55orOver                    <- 1#6
-  hh_pregnant                           <- 1#6
-  non.hh_children                       <- 1#5
-  non.hh_adults                         <- 1#7
+  month_since_own_home                  <- 1#7 #3
+  months_since_any_home                 <- 1#6 #7
+  loc_sleep_last_night                  <- 1#6 #8
+  loc_sleep_tonight                     <- 1#7 #5
+  now_or_at.risk_violence               <- 1#6 #10
+  leave_prev.curr_living_bc_felt_unsafe <- 1#4 #9
+  exp_violence_close                    <- 1#3 #5
+  exp_violence_homeless                 <- 1#5 #5
+  hh_phys.mntl_health_conds             <- 1#7 #9
+  hh_lung.kid.liv.heart.sud             <- 1#5 #7
+  hard_get_doctor_rx                    <- 1#6 #8
+  health_ins                            <- 1#3 #1
+  hh_size                               <- 1#7 #2
+  hh_anyone_5orUnder                    <- 1#4 #6
+  hh_anyone_55orOver                    <- 1#6 #6
+  hh_pregnant                           <- 1#6 #1
+  non.hh_children                       <- 1#5 #7
+  non.hh_adults                         <- 1#7 #3
 }
 
 
@@ -186,10 +186,19 @@ select(mo.last2, Race, makeup_t20, makeup_t100, which) %>%
   as.data.table() %>%
   melt(., id.vars = c("Race", "which")) %>%
   ggplot(data = ., 
-         aes(x = Race, y = value, fill = variable)) + 
-  geom_col(position = "dodge")+
+         aes(x = Race, y = value)) + 
+  geom_col(position = "dodge", 
+           aes(fill = variable))+
   scale_y_continuous(labels = scales::percent, 
                      breaks = seq(0, 100, by = .10), 
                      limits = c(0,1))+
   labs(title = "Outcomes", 
-       subtitle = glue("model fingerprint: {unique(mo.unw$sim_fp)}"))
+       subtitle = glue("model fingerprint: {unique(mo.unw$sim_fp)}")) +
+  geom_point(data = data.frame(Race = c("Asian", "Black", 
+                                        "Indigenous", 
+                                        "Multiple Races", 
+                                        "White"), 
+                               goal = c(0.013, 0.423, 0.026, 0.013, 0.526)), 
+             aes(x = Race, y = goal, color = "Goal"), 
+             size = 4)+
+  scale_color_manual(values = "black")

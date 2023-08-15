@@ -363,9 +363,15 @@ fp.baseline <- first(mo$sim_fp)
 mo.bl <- mo2[mo2$sim_fp == fp.baseline,]
 
 
-b2_other_races <- NA
+b2_other_races <- mo3 %>%
+  as.data.table() %>%
+  dcast(., 
+        sim_fp ~ race, value.var = "t_score" , 
+        fun.aggregate = sum) 
 #mo[mo$sim_fp == fp.baseline,] %>%
-mo3 %>%
+
+
+keep.weights <- mo3 %>%
   as.data.table() %>%
   dcast(., 
         sim_fp ~ race, value.var = "t_score" , 
@@ -374,9 +380,66 @@ mo3 %>%
   group_by(Asian, Black, Indigenous, 
            mr = `Multiple Races`, White) %>%
   summarise(n = n()) %>%
+  mutate(., 
+         count_ppl = Asian + Black + Indigenous + mr + White) %>%
+  .[.$count_ppl == 19,] %>%
+  .[.$Asian > 0,] %>%
   .[.$Indigenous  > 0 | 
-      .$mr > 0 | .$Asian > 0,] %>%
-  .[.$White %in% c(9),]
+      .$mr > 0,] %>%
+  .[.$White %in% c(9,10,11),] %>%
+  right_join(., b2_other_races,
+             by = c("Asian", "Black", 
+                    "Indigenous", "mr" = "Multiple Races", 
+                    "White")) %>%
+  .[complete.cases(.),] %>% .$sim_fp
 
-mo 
-mo3
+use.weights <- mo.all[mo.all$sim_fp %in% keep.weights,] %>%
+  group_by(weights) %>%
+  summarise(n = n())
+
+use.weights.list <- list()
+
+for(i in 1:nrow(use.weights)){
+  use.weights.list[[i]] <- con_weights(use.weights$weights[i])
+}
+
+for(i in 1:length(use.weights.list)){
+  colnames(use.weights.list[[i]])[2] <- paste("weight", i, sep = "_", collapse = "_")
+}
+
+use.weights.df <- use.weights.list[[1]]
+
+for(i in 2:length(use.weights.list)){
+  use.weights.df <- left_join(use.weights.df, 
+                              use.weights.list[[i]])
+}
+
+use.weights.df %>%
+  as.data.table() %>%
+  melt(., id.vars = "qnum") %>%
+  ggplot(data = ., 
+       ) + 
+  geom_boxplot(aes(x = qnum, group = qnum, 
+                   y = value)) +
+  geom_smooth(aes(x = qnum, y = value), method = "auto")+
+  scale_y_continuous(limits = c(0,10), 
+                     breaks = seq(0,10,by=1))
+
+
+# TODO 
+# show baseline unweighted chart
+# show options for 43/20 goal distributions
+# do it like in the word document, but in different stages 
+# 1. the original unweighted
+# 2. scenario 1 weighted
+# 3. scenario 2 weighted
+# 4. etc--
+# for 1130 ce tacitcal
+
+
+
+
+# 2- another version weigheted scenario 1
+# 3. weighted scenario 2
+# 
+# 3- make an agenda item for 11:30 ce tacitcal meeting

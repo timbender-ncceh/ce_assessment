@@ -31,10 +31,6 @@ while(runit < 500){
                               size = nrow(mc.weights), 
                               replace = T) #%>% log()
   
-  
-  
-  
-  
   for(i in 1:nrow(mc.weights)){
     assign(x = mc.weights$short_name[i], 
            value = mc.weights$weight[i])

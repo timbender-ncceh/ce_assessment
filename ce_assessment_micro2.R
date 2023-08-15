@@ -55,24 +55,24 @@ max.composite.score                     <- 1000
 
 if(!"override.weights" %in% ls()){
   # set weights
-  month_since_own_home                  <- 7
-  months_since_any_home                 <- 6
-  loc_sleep_last_night                  <- 6
-  loc_sleep_tonight                     <- 7
-  now_or_at.risk_violence               <- 6
-  leave_prev.curr_living_bc_felt_unsafe <- 4
-  exp_violence_close                    <- 3
-  exp_violence_homeless                 <- 5
-  hh_phys.mntl_health_conds             <- 7
-  hh_lung.kid.liv.heart.sud             <- 5
-  hard_get_doctor_rx                    <- 6
-  health_ins                            <- 3
-  hh_size                               <- 7
-  hh_anyone_5orUnder                    <- 4
-  hh_anyone_55orOver                    <- 6
-  hh_pregnant                           <- 6
-  non.hh_children                       <- 5
-  non.hh_adults                         <- 7
+  month_since_own_home                  <- 1#7
+  months_since_any_home                 <- 1#6
+  loc_sleep_last_night                  <- 1#6
+  loc_sleep_tonight                     <- 1#7
+  now_or_at.risk_violence               <- 1#6
+  leave_prev.curr_living_bc_felt_unsafe <- 1#4
+  exp_violence_close                    <- 1#3
+  exp_violence_homeless                 <- 1#5
+  hh_phys.mntl_health_conds             <- 1#7
+  hh_lung.kid.liv.heart.sud             <- 1#5
+  hard_get_doctor_rx                    <- 1#6
+  health_ins                            <- 1#3
+  hh_size                               <- 1#7
+  hh_anyone_5orUnder                    <- 1#4
+  hh_anyone_55orOver                    <- 1#6
+  hh_pregnant                           <- 1#6
+  non.hh_children                       <- 1#5
+  non.hh_adults                         <- 1#7
 }
 
 
@@ -122,3 +122,74 @@ out.score$sim_fp <- sim.fingerprint %>% as.character()
 write_csv(x = out.score, 
           file = "model_outputs2.csv", 
           append = T)
+
+
+# summary chart
+cw.ques <- read_csv('https://raw.githubusercontent.com/timbender-ncceh/ce_assessment/main/MASTER_cw_qshortname.csv')
+plot.ques <- NULL
+plot.wts  <- NULL
+for(i in 1:nrow(cw.ques)){
+  plot.ques <- c(plot.ques, cw.ques[i,]$short_name)
+  plot.wts <- c(plot.wts, get(cw.ques[i,]$short_name))
+}
+
+plot.df <- data.frame(short_name = plot.ques, 
+           weight = plot.wts, 
+           qnum = (1:18)) %>%
+  left_join(., 
+            read_csv("https://raw.githubusercontent.com/timbender-ncceh/ce_assessment/main/MASTER_crosswalk_vuln.csv")) %>%
+  as_tibble() %>%
+  select(., qnum, short_name, vuln_group, weight)
+plot.df$short_name_f <- factor(plot.df$short_name, 
+                               levels = unique(plot.df$short_name[order(plot.df$weight)]))
+
+
+ggplot(data = plot.df, 
+         aes(x = short_name_f, y = weight)) + 
+  geom_col()+
+  facet_grid(~vuln_group, scales = "free", space = "free")+
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1))+
+  scale_y_continuous(limits = c(0,NA), 
+                     breaks = seq(0,100,by=1))
+
+
+mo.last <- read_csv("model_outputs2.csv") 
+mo.last <- mo.last[mo.last$sim_fp == last(mo.last$sim_fp),]
+
+
+mo.last2 <- mo.last %>%
+  group_by(top20 = ifelse(top20 == T,"top20", "top100"),Race, .drop = F) %>%
+  summarise(n = n_distinct(client_id2)) %>%
+  ungroup() %>%
+  as.data.table() %>%
+  dcast(., 
+        Race ~ top20, 
+        fill = 0) %>%
+  as.data.frame() %>%
+  mutate(makeup_top20 = top20 / sum(top20), 
+         makeup_top100 = top100/ sum(top100)) 
+
+colnames(mo.last2) <- c("Race", "n_t20", "n_t100", 
+                       "makeup_t20", "makeup_t100")
+mo.last2$which <- "unweighted"
+
+library(glue)
+
+print(mo.last2)
+
+# if(between(out.R[out.R$Race == "Black",]$makeup_t100 / 
+#            out.R[out.R$Race == "Black",]$makeup_t20  ,0.97,1.07)){
+#   stop("we got one - Race")
+# }
+
+select(mo.last2, Race, makeup_t20, makeup_t100, which) %>%
+  as.data.table() %>%
+  melt(., id.vars = c("Race", "which")) %>%
+  ggplot(data = ., 
+         aes(x = Race, y = value, fill = variable)) + 
+  geom_col(position = "dodge")+
+  scale_y_continuous(labels = scales::percent, 
+                     breaks = seq(0, 100, by = .10), 
+                     limits = c(0,1))+
+  labs(title = "Outcomes", 
+       subtitle = glue("model fingerprint: {unique(mo.unw$sim_fp)}"))

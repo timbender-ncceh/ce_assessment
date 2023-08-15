@@ -19,7 +19,8 @@
 *  hh_pregnant                           <- 8 
 *  non.hh_children                       <- 8 
 *  non.hh_adults                         <- 9
-[image](https://github.com/timbender-ncceh/ce_assessment/assets/105810134/3640822e-ac0b-4dfd-969f-332ecd9b4035)
+
+![image](https://github.com/timbender-ncceh/ce_assessment/assets/105810134/05447c7f-25ce-49ce-a1eb-5d6248790a37)
 
 
 ## IMPORTANT FILES

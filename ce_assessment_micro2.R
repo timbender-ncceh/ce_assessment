@@ -55,24 +55,24 @@ max.composite.score                     <- 1000
 
 if(!"override.weights" %in% ls()){
   # set weights
-  month_since_own_home                  <- 1#7 #3
-  months_since_any_home                 <- 1#6 #7
-  loc_sleep_last_night                  <- 1#6 #8
-  loc_sleep_tonight                     <- 1#7 #5
-  now_or_at.risk_violence               <- 1#6 #10
-  leave_prev.curr_living_bc_felt_unsafe <- 1#4 #9
-  exp_violence_close                    <- 1#3 #5
-  exp_violence_homeless                 <- 1#5 #5
-  hh_phys.mntl_health_conds             <- 1#7 #9
-  hh_lung.kid.liv.heart.sud             <- 1#5 #7
-  hard_get_doctor_rx                    <- 1#6 #8
-  health_ins                            <- 1#3 #1
-  hh_size                               <- 1#7 #2
-  hh_anyone_5orUnder                    <- 1#4 #6
-  hh_anyone_55orOver                    <- 1#6 #6
-  hh_pregnant                           <- 1#6 #1
-  non.hh_children                       <- 1#5 #7
-  non.hh_adults                         <- 1#7 #3
+  month_since_own_home                  <- 3 
+  months_since_any_home                 <- 9 
+  loc_sleep_last_night                  <- 9 
+  loc_sleep_tonight                     <- 3 
+  now_or_at.risk_violence               <- 1 
+  leave_prev.curr_living_bc_felt_unsafe <- 2
+  exp_violence_close                    <- 4 
+  exp_violence_homeless                 <- 3 
+  hh_phys.mntl_health_conds             <- 9 
+  hh_lung.kid.liv.heart.sud             <- 6 
+  hard_get_doctor_rx                    <- 1 
+  health_ins                            <- 7 
+  hh_size                               <- 7 
+  hh_anyone_5orUnder                    <- 5 
+  hh_anyone_55orOver                    <- 4 
+  hh_pregnant                           <- 8 
+  non.hh_children                       <- 8 
+  non.hh_adults                         <- 9 
 }
 
 
@@ -149,9 +149,10 @@ ggplot(data = plot.df,
   geom_col()+
   facet_grid(~vuln_group, scales = "free", space = "free")+
   theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1))+
-  scale_y_continuous(limits = c(0,NA), 
-                     breaks = seq(0,100,by=1))
-
+  scale_y_continuous(limits = c(0,10), 
+                     breaks = seq(0,100,by=1))+
+  labs(title = "Weight Values by Question and Vulnerability Category")
+Sys.sleep(3)
 
 mo.last <- read_csv("model_outputs2.csv") 
 mo.last <- mo.last[mo.last$sim_fp == last(mo.last$sim_fp),]
@@ -192,8 +193,9 @@ select(mo.last2, Race, makeup_t20, makeup_t100, which) %>%
   scale_y_continuous(labels = scales::percent, 
                      breaks = seq(0, 100, by = .10), 
                      limits = c(0,1))+
-  labs(title = "Outcomes", 
-       subtitle = glue("model fingerprint: {unique(mo.unw$sim_fp)}")) +
+  labs(title = "Vulnerability Ranking Goal Outcomes", 
+       subtitle = "Percentage of Race in Top 20% of Output Ranking",
+       caption = glue("model fingerprint: {unique(mo.unw$sim_fp)}")) +
   geom_point(data = data.frame(Race = c("Asian", "Black", 
                                         "Indigenous", 
                                         "Multiple Races", 
@@ -202,3 +204,6 @@ select(mo.last2, Race, makeup_t20, makeup_t100, which) %>%
              aes(x = Race, y = goal, color = "Goal"), 
              size = 4)+
   scale_color_manual(values = "black")
+
+
+override.weights <- F

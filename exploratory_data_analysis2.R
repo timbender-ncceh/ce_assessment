@@ -172,9 +172,22 @@ out.allgoals %>%
 
 
 out.weights <- out.allgoals %>%
+  .[.$sim_fp %in% goal.fp,] %>%
   left_join(., 
             summarise(group_by_all(select(mo.all, sim_fp, weights)))) %>%
   .[!duplicated(.),]
 
-sample(out.weights$weights, size = 1) %>%
-  con_weights()
+
+
+# get and assign random wts----
+new.wts <- full_join(con_weights(sample(out.weights$weights, size = 1)), 
+          select(read_csv('https://raw.githubusercontent.com/timbender-ncceh/ce_assessment/main/MASTER_cw_qshortname.csv'), 
+                 short_name, qnum))
+
+for(i in 1:nrow(new.wts)){
+  assign(x = new.wts$short_name[i], 
+         value = new.wts$weight[i])
+}
+
+override.weights <- T
+

@@ -1,10 +1,10 @@
 # ce_assessment README
 
 # TRACKING OUTCOMES
-### UNWEIGHTED (RACE)
-### UNWEIGHTED (ETHNICITY)
-### OPTIMAL WEIGHTS (as of 8/21/23)
-
+### UNWEIGHTED
+### OPTIMAL WEIGHTS (RACE) (as of 8/21/23)
+### OPTIMAL WEIGHTS (ETHNICITY) (as of 8/21/23)
+* not yet completed
 
 
 

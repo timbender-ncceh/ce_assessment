@@ -14,7 +14,10 @@ all raw simulation data is stored here: https://raw.githubusercontent.com/timben
 ![image](https://github.com/timbender-ncceh/ce_assessment/assets/105810134/5211eaa6-d314-487a-86d5-21963014c130)
 
 ### OPTIMAL WEIGHTS (ETHNICITY) (as of 8/21/23)
-* not yet completed
+![image](https://github.com/timbender-ncceh/ce_assessment/assets/105810134/b70a00cc-5333-455c-9450-747b9c180a9f)
+![image](https://github.com/timbender-ncceh/ce_assessment/assets/105810134/bc3bd728-bd61-4b81-a3b6-42873adf431d)
+![image](https://github.com/timbender-ncceh/ce_assessment/assets/105810134/2e7cb28a-1e13-4285-8e6f-63c3ed2cf2f5)
+
 
 
 

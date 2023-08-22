@@ -1,21 +1,17 @@
 # ce_assessment README
+## RAW Data Logs:
+all raw simulation data is stored here: https://raw.githubusercontent.com/timbender-ncceh/ce_assessment/main/model_outputs2.csv
 
-# TRACKING OUTCOMES
+## TRACKING OUTCOMES
 ### UNWEIGHTED
 ![image](https://github.com/timbender-ncceh/ce_assessment/assets/105810134/b70a00cc-5333-455c-9450-747b9c180a9f)
 ![image](https://github.com/timbender-ncceh/ce_assessment/assets/105810134/cf727c49-b650-474c-84b0-fc0433bf2919)
 ![image](https://github.com/timbender-ncceh/ce_assessment/assets/105810134/7c7c0713-a72d-4127-8956-0c68a67e61a6)
 
-
-
-
-
 ### OPTIMAL WEIGHTS (RACE) (as of 8/21/23)
 ![image](https://github.com/timbender-ncceh/ce_assessment/assets/105810134/ccc2665a-a7ad-43f4-bb51-c8dc4f679627)
 ![image](https://github.com/timbender-ncceh/ce_assessment/assets/105810134/1c8b648d-7f1b-41f2-b767-2bf865343df7)
 ![image](https://github.com/timbender-ncceh/ce_assessment/assets/105810134/5211eaa6-d314-487a-86d5-21963014c130)
-
-
 
 ### OPTIMAL WEIGHTS (ETHNICITY) (as of 8/21/23)
 * not yet completed

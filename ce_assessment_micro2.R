@@ -151,15 +151,19 @@ ggplot(data = plot.df,
   facet_grid(~vuln_group, scales = "free", space = "free")+
   theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1))+
   scale_y_continuous(limits = c(0,10), 
-                     breaks = seq(0,100,by=1))+
+                     breaks = seq(0,100,by=1), 
+                     minor_breaks = seq(0,100,by=1))+
   labs(title = "Weight Values by Question and Vulnerability Category", 
        subtitle = glue("Scenario Name: {name.scenario}\nSim Fingerprint: {sim.fingerprint}"))
+
+
 Sys.sleep(3)
 
 mo.last <- read_csv("model_outputs2.csv") 
 mo.last <- mo.last[mo.last$sim_fp == last(mo.last$sim_fp),]
 
 
+# race = mo.last2
 mo.last2 <- mo.last %>%
   group_by(top20 = ifelse(top20 == T,"top20", "top100"),Race, .drop = F) %>%
   summarise(n = n_distinct(client_id2)) %>%
@@ -206,5 +210,51 @@ select(mo.last2, Race, makeup_t20, makeup_t100, which) %>%
              size = 4)+
   scale_color_manual(values = "black")
 
+# ethnicity = mo.last3
+mo.last3 <- mo.last %>%
+  group_by(top20 = ifelse(top20 == T,"top20", "top100"),Ethnicty, .drop = F) %>%
+  summarise(n = n_distinct(client_id2)) %>%
+  ungroup() %>%
+  as.data.table() %>%
+  dcast(., 
+        Ethnicty ~ top20, 
+        fill = 0) %>%
+  as.data.frame() %>%
+  mutate(makeup_top20 = top20 / sum(top20), 
+         makeup_top100 = top100/ sum(top100)) 
+
+colnames(mo.last3) <- c("Ethnicty", "n_t20", "n_t100", 
+                        "makeup_t20", "makeup_t100")
+mo.last3$which <- name.scenario
+
+library(glue)
+
+print(mo.last3)
+
+# if(between(out.R[out.R$Race == "Black",]$makeup_t100 / 
+#            out.R[out.R$Race == "Black",]$makeup_t20  ,0.97,1.07)){
+#   stop("we got one - Race")
+# }
+
+select(mo.last3, Ethnicty, makeup_t20, makeup_t100, which) %>%
+  as.data.table() %>%
+  melt(., id.vars = c("Ethnicty", "which")) %>%
+  ggplot(data = ., 
+         aes(x = Ethnicty, y = value)) + 
+  geom_col(position = "dodge", 
+           aes(fill = variable))+
+  scale_y_continuous(labels = scales::percent, 
+                     breaks = seq(0, 100, by = .10), 
+                     limits = c(0,1))+
+  labs(title = "Vulnerability Ranking Goal Outcomes\nPercentage of Ethnicity in Top 20% of Output Ranking",
+       subtitle = glue("model fingerprint: {last(mo.last$sim_fp)}")) #+
+  # geom_point(data = data.frame(Race = c("Asian", "Black", 
+  #                                       "Indigenous", 
+  #                                       "Multiple Races", 
+  #                                       "White"), 
+  #                              goal = c(0.013, 0.423, 0.026, 0.013, 0.526)), 
+  #            aes(x = Race, y = goal, color = "Goal"), 
+  #            size = 4)+
+  #scale_color_manual(values = "black")
 
 override.weights <- F

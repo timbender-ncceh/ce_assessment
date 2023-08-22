@@ -53,6 +53,7 @@ quest_vuln$order_vuln.norm[is.na(quest_vuln$order_vuln.norm)] <- 0
 # Vars----
 max.composite.score                     <- 1000
 
+name.scenario <- "Optimal"
 if(!"override.weights" %in% ls()){
   # set weights
   month_since_own_home                  <- 3 
@@ -151,7 +152,8 @@ ggplot(data = plot.df,
   theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1))+
   scale_y_continuous(limits = c(0,10), 
                      breaks = seq(0,100,by=1))+
-  labs(title = "Weight Values by Question and Vulnerability Category")
+  labs(title = "Weight Values by Question and Vulnerability Category", 
+       subtitle = glue("Scenario Name: {name.scenario}\nSim Fingerprint: {sim.fingerprint}"))
 Sys.sleep(3)
 
 mo.last <- read_csv("model_outputs2.csv") 
@@ -172,7 +174,7 @@ mo.last2 <- mo.last %>%
 
 colnames(mo.last2) <- c("Race", "n_t20", "n_t100", 
                        "makeup_t20", "makeup_t100")
-mo.last2$which <- "unweighted"
+mo.last2$which <- name.scenario
 
 library(glue)
 
@@ -193,9 +195,8 @@ select(mo.last2, Race, makeup_t20, makeup_t100, which) %>%
   scale_y_continuous(labels = scales::percent, 
                      breaks = seq(0, 100, by = .10), 
                      limits = c(0,1))+
-  labs(title = "Vulnerability Ranking Goal Outcomes", 
-       subtitle = "Percentage of Race in Top 20% of Output Ranking",
-       caption = glue("model fingerprint: {unique(mo.unw$sim_fp)}")) +
+  labs(title = "Vulnerability Ranking Goal Outcomes\nPercentage of Race in Top 20% of Output Ranking",
+       subtitle = glue("model fingerprint: {last(mo.last$sim_fp)}")) +
   geom_point(data = data.frame(Race = c("Asian", "Black", 
                                         "Indigenous", 
                                         "Multiple Races", 

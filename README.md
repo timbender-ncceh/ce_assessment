@@ -1,27 +1,11 @@
 # ce_assessment README
 
 # TRACKING OUTCOMES
+## UNWEIGHTED (RACE)
+## UNWEIGHTED (ETHNICITY)
 ## OPTIMAL WEIGHTS (as of 8/21/23)
-*  month_since_own_home                  <- 3 
-*  months_since_any_home                 <- 9 
-*  loc_sleep_last_night                  <- 9 
-*  loc_sleep_tonight                     <- 3 
-*  now_or_at.risk_violence               <- 1 
-*  leave_prev.curr_living_bc_felt_unsafe <- 2
-*  exp_violence_close                    <- 4 
-*  exp_violence_homeless                 <- 3 
-*  hh_phys.mntl_health_conds             <- 9 
-*  hh_lung.kid.liv.heart.sud             <- 6 
-*  hard_get_doctor_rx                    <- 1 
-*  health_ins                            <- 7 
-*  hh_size                               <- 7 
-*  hh_anyone_5orUnder                    <- 5 
-*  hh_anyone_55orOver                    <- 4 
-*  hh_pregnant                           <- 8 
-*  non.hh_children                       <- 8 
-*  non.hh_adults                         <- 9
 
-![image](https://github.com/timbender-ncceh/ce_assessment/assets/105810134/05447c7f-25ce-49ce-a1eb-5d6248790a37)
+
 
 
 ## IMPORTANT FILES

@@ -1,6 +1,7 @@
 # ce_assessment README
 
-## BEST WEIGHTS SO FAR
+# TRACKING OUTCOMES
+## OPTIMAL WEIGHTS (as of 8/21/23)
 *  month_since_own_home                  <- 3 
 *  months_since_any_home                 <- 9 
 *  loc_sleep_last_night                  <- 9 

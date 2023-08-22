@@ -3,8 +3,11 @@
 # TRACKING OUTCOMES
 ### UNWEIGHTED
 ![image](https://github.com/timbender-ncceh/ce_assessment/assets/105810134/b70a00cc-5333-455c-9450-747b9c180a9f)
-![image](https://github.com/timbender-ncceh/ce_assessment/assets/105810134/b08ad1c7-14e1-4401-aacd-f2ee749162e9)
-![image](https://github.com/timbender-ncceh/ce_assessment/assets/105810134/da6e0083-d658-4eff-b94e-4828072b6afa)
+![image](https://github.com/timbender-ncceh/ce_assessment/assets/105810134/cf727c49-b650-474c-84b0-fc0433bf2919)
+![image](https://github.com/timbender-ncceh/ce_assessment/assets/105810134/7c7c0713-a72d-4127-8956-0c68a67e61a6)
+
+
+
 
 
 ### OPTIMAL WEIGHTS (RACE) (as of 8/21/23)

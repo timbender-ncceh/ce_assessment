@@ -1,6 +1,6 @@
 # ce_assessment README
-## RAW Data Logs:
-all raw simulation data is stored here: https://raw.githubusercontent.com/timbender-ncceh/ce_assessment/main/model_outputs2.csv
+## Simulation Data Logs:
+All raw simulation data is stored here: https://raw.githubusercontent.com/timbender-ncceh/ce_assessment/main/model_outputs2.csv.  Each time a simulation was run a unique md5 hash was generated based on the timestamp at which the simulation was run.  This way there would be a unique ID for each simulation, because there are starting to be simulations which duplicate scores.  
 
 ## TRACKING OUTCOMES
 ### UNWEIGHTED
@@ -18,11 +18,15 @@ all raw simulation data is stored here: https://raw.githubusercontent.com/timben
 ![image](https://github.com/timbender-ncceh/ce_assessment/assets/105810134/ccc2665a-a7ad-43f4-bb51-c8dc4f679627)
 #### optimal inputs by group:
 ![image](https://github.com/timbender-ncceh/ce_assessment/assets/105810134/1c8b648d-7f1b-41f2-b767-2bf865343df7)
+#### optimal inputs as outputs (race):
 ![image](https://github.com/timbender-ncceh/ce_assessment/assets/105810134/5211eaa6-d314-487a-86d5-21963014c130)
 
 ### OPTIMAL WEIGHTS (ETHNICITY) (as of 8/21/23)
+#### optimal inputs: 
 ![image](https://github.com/timbender-ncceh/ce_assessment/assets/105810134/ccc2665a-a7ad-43f4-bb51-c8dc4f679627)
+#### optimal inputs by group:
 ![image](https://github.com/timbender-ncceh/ce_assessment/assets/105810134/bc3bd728-bd61-4b81-a3b6-42873adf431d)
+#### optimal inputs as outputs (ethnicity):
 ![image](https://github.com/timbender-ncceh/ce_assessment/assets/105810134/2e7cb28a-1e13-4285-8e6f-63c3ed2cf2f5)
 
 

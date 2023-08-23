@@ -7,7 +7,7 @@ The charts and images below show the following:
 
 | Index of Images | UNWEIGHTED | WEIGHTED | 
 |---|---|---|
-| List of weights| (link)[https://github.com/timbender-ncceh/ce_assessment/blob/main/README.md#unweighted-inputs] | (link)[] |
+| List of weights| [link[(https://github.com/timbender-ncceh/ce_assessment/blob/main/README.md#unweighted-inputs) | (link)[] |
 | Weights plotted by groups| //tbd// | //tbd//|
 | Vulnerability Rankings plotted by Race| //tbd// | //tbd// |
 | Vulnerability Rankings plotted by Ethnicity| //tbd// | //tbd// |

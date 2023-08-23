@@ -5,9 +5,9 @@ All raw simulation data is stored here: https://raw.githubusercontent.com/timben
 ## TRACKING OUTCOMES
 The charts and images below show the following: 
 
-|  | UNWEIGHTED | WEIGHTED | 
+| Index of Images | UNWEIGHTED | WEIGHTED | 
 |---|---|---|
-| List of weights| //tbd// | //tbd// |
+| List of weights| (link)[https://github.com/timbender-ncceh/ce_assessment/blob/main/README.md#unweighted-inputs] | (link)[] |
 | Weights plotted by groups| //tbd// | //tbd//|
 | Vulnerability Rankings plotted by Race| //tbd// | //tbd// |
 | Vulnerability Rankings plotted by Ethnicity| //tbd// | //tbd// |

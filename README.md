@@ -3,6 +3,16 @@
 All raw simulation data is stored here: https://raw.githubusercontent.com/timbender-ncceh/ce_assessment/main/model_outputs2.csv.  Each time a simulation was run a unique md5 hash was generated based on the timestamp at which the simulation was run.  This way there would be a unique ID for each simulation, because there are starting to be simulations which duplicate scores.  
 
 ## TRACKING OUTCOMES
+The charts and images below show the following: 
+
+|  | UNWEIGHTED | WEIGHTED | 
+|---|---|---|
+| List of weights| //tbd// | //tbd// |
+| Weights plotted by groups| //tbd// | //tbd//|
+| Vulnerability Rankings plotted by Race| //tbd// | //tbd// |
+| Vulnerability Rankings plotted by Ethnicity| //tbd// | //tbd// |
+
+
 ### UNWEIGHTED
 #### unweighted inputs:
 ![image](https://github.com/timbender-ncceh/ce_assessment/assets/105810134/b70a00cc-5333-455c-9450-747b9c180a9f)

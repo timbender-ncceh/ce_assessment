@@ -4,8 +4,11 @@ all raw simulation data is stored here: https://raw.githubusercontent.com/timben
 
 ## TRACKING OUTCOMES
 ### UNWEIGHTED
+##### unweighted inputs:
 ![image](https://github.com/timbender-ncceh/ce_assessment/assets/105810134/b70a00cc-5333-455c-9450-747b9c180a9f)
+##### unweighted inputs by group:
 ![image](https://github.com/timbender-ncceh/ce_assessment/assets/105810134/cf727c49-b650-474c-84b0-fc0433bf2919)
+##### unweighted inputs as outputs
 ![image](https://github.com/timbender-ncceh/ce_assessment/assets/105810134/7c7c0713-a72d-4127-8956-0c68a67e61a6)
 
 ### OPTIMAL WEIGHTS (RACE) (as of 8/21/23)

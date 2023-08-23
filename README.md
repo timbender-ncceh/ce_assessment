@@ -5,12 +5,12 @@ All raw simulation data is stored here: https://raw.githubusercontent.com/timben
 ## TRACKING OUTCOMES
 The charts and images below show the following: 
 
-| Index of Images | UNWEIGHTED | WEIGHTED | 
+| Index of Images | UNWEIGHTED | WEIGHTED (Optimal) | 
 |---|---|---|
-| List of weights| [link](https://github.com/timbender-ncceh/ce_assessment/blob/main/README.md#unweighted-inputs) | [link]() |
-| Weights plotted by groups| //tbd// | //tbd//|
-| Vulnerability Rankings plotted by Race| //tbd// | //tbd// |
-| Vulnerability Rankings plotted by Ethnicity| //tbd// | //tbd// |
+| List of weights| [link](https://github.com/timbender-ncceh/ce_assessment/blob/main/README.md#unweighted-inputs) | [link](https://github.com/timbender-ncceh/ce_assessment/blob/main/README.md#optimal-inputs) |
+| Weights plotted by groups| [link](https://github.com/timbender-ncceh/ce_assessment/blob/main/README.md#unweighted-inputs-by-group) |[link](https://github.com/timbender-ncceh/ce_assessment/blob/main/README.md#optimal-inputs-by-group)|
+| Vulnerability Rankings plotted by Race| [link](https://github.com/timbender-ncceh/ce_assessment/blob/main/README.md#unweighted-inputs-as-outputs-race) | [link](https://github.com/timbender-ncceh/ce_assessment/blob/main/README.md#optimal-inputs-as-outputs-race) |
+| Vulnerability Rankings plotted by Ethnicity| [link](https://github.com/timbender-ncceh/ce_assessment/blob/main/README.md#unweighted-inputs-as-outputs-ethnicity) | [link](https://github.com/timbender-ncceh/ce_assessment/blob/main/README.md#optimal-inputs-as-outputs-ethnicity) |
 
 
 ### UNWEIGHTED

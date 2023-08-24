@@ -5,7 +5,7 @@ All raw simulation data is stored here: https://raw.githubusercontent.com/timben
 ## TRACKING OUTCOMES
 The charts and images below show the following: 
 
-| Index of Images | UNWEIGHTED | WEIGHTED (Optimal) | 
+| Index of Outcomes | [UNWEIGHTED](https://github.com/timbender-ncceh/ce_assessment/blob/main/README.md#unweighted) (Baseline) | [WEIGHTED](https://github.com/timbender-ncceh/ce_assessment/blob/main/README.md#weighted) (Optimal) | 
 |---|---|---|
 | List of weights| [link](https://github.com/timbender-ncceh/ce_assessment/blob/main/README.md#unweighted-inputs) | [link](https://github.com/timbender-ncceh/ce_assessment/blob/main/README.md#optimal-inputs) |
 | Weights plotted by groups| [link](https://github.com/timbender-ncceh/ce_assessment/blob/main/README.md#unweighted-inputs-by-group) |[link](https://github.com/timbender-ncceh/ce_assessment/blob/main/README.md#optimal-inputs-by-group)|

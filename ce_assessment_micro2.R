@@ -117,12 +117,61 @@ out.score$weights <- round(weights.df[order(weights.df$qnum),]$weight_factor,2) 
 out.score$sim_fp <- sim.fingerprint %>% as.character()
 
 
-
 # write_out 
 
 write_csv(x = out.score, 
           file = "model_outputs2.csv", 
           append = T)
+
+# clean up duplicated simulations----
+mo.all <- read_csv("model_outputs2.csv") %>%
+  .[!duplicated(.),]
+
+# narrow down duplicated weights to 1 weight <--> sim_fp combo 
+mo.all <- mo.all %>%
+  group_by(weights, sim_fp,) %>%
+  summarise() %>%
+  ungroup() %>%
+  group_by(weights) %>%
+  slice_sample(., n = 1) %>%
+  inner_join(., mo.all) 
+
+# write to output
+write_csv(x = mo.all, 
+          file = "model_outputs2.csv", 
+          append = F)
+#/ cleanup----
+
+
+# # how many duplicates? and other QA stuffs----
+# 
+# temp <- read_csv("model_outputs2.csv")
+# 
+# # make sure every fingerprint has only 1 weight
+# temp %>%
+#   group_by(sim_fp) %>%
+#   summarise(nd_weights = n_distinct(weights)) %>%
+#   .[.$nd_weights != 1,] %>%
+#   .[order(.$nd_weights),]
+# 
+# # see if every weight has only 1 fingerprint
+#  
+# multi.fps <- temp %>%
+#   group_by(weights) %>%
+#   summarise(nd_fingerprints = n_distinct(sim_fp)) %>%
+#   .[.$nd_fingerprints != 1,] %>%
+#   .[order(.$nd_fingerprints),]
+# 
+# # do clients get different composite scores for the same weight when there are
+# # multiple weights?
+# temp[temp$weights %in% multi.fps$weights,] %>%
+#   group_by(client_id2, weights) %>%
+#   summarise(n = n(), 
+#             n_compscores = n_distinct(comp_score)) %>%
+#   .[.$n_compscores != 1,]
+#   
+# temp$baseline <- ifelse(temp$weights == "1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1", 
+#                         "baseline", "other")
 
 
 # summary chart
@@ -160,7 +209,17 @@ ggplot(data = plot.df,
 Sys.sleep(3)
 
 mo.last <- read_csv("model_outputs2.csv") 
-mo.last <- mo.last[mo.last$sim_fp == last(mo.last$sim_fp),]
+
+# get all the scenarios that match the input weights
+mo.last <- mo.last[mo.last$weights == 
+                     paste(weights.df$weight_factor[order(weights.df$qnum,decreasing=F)], 
+                           collapse = "|"),]
+# this should only be 1 fingerprint.  check to ensure
+if(!identical(nrow(mo.last %>%
+  group_by(weights, sim_fp) %>%
+  summarise(n = n())),1L)){
+  stop("there is an issue with model_outputs2.csv not deduplicating to 1 sim_fp per weights variable")
+}
 
 
 # race = mo.last2

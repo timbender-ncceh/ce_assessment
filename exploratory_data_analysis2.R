@@ -39,6 +39,18 @@ con_weights <- function(w.in = mo.all$weights[sample(1:nrow(mo.all),size = 1)]){
 mo.all <- read_csv("model_outputs2.csv") %>%
   .[!duplicated(.),]
 
+# clean up duplicated simulations----
+
+
+# narrow down duplicated weights to 1 weight <--> sim_fp combo 
+mo.all <- mo.all %>%
+  group_by(weights, sim_fp,) %>%
+  summarise() %>%
+  ungroup() %>%
+  group_by(weights) %>%
+  slice_sample(., n = 1) %>%
+  inner_join(., mo.all) 
+
 
 # get unweighted output----
 mo.unw <- mo.all[mo.all$sim_fp == first(mo.all$sim_fp),] 
